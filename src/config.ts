@@ -90,8 +90,9 @@ export const Config: Schema<Config> = Schema.object({
    * 当 showImage 为 true 时使用此 URL 显示图片。
    */
   imageUrl: Schema.string()
-    .default('https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/releases/download/%E6%93%8D%E4%BD%9C%E6%8F%90%E7%A4%BA.png/%E6%93%8D%E4%BD%9C%E6%8F%90%E7%A4%BA.png')
-    .role('link')
+    .default('https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/操作提示.png')
+    // .role('link')
+    .role('textarea', { rows: [2, 5] })
     .description('🖼️ 操作提示图片的 URL（Markdown 中显示在链接/按钮上方）'),
 
   /**

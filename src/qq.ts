@@ -32,7 +32,7 @@ export function buildMarkdownMessage(
   botUid: string,
   groupCode: string,
 ): Record<string, any> {
-  const imageBlock = showImage ? `![img #${imageWidth} #${imageHeight}](${imageUrl})\n\n` : ''
+  const imageBlock = showImage ? `![ #${imageWidth} #${imageHeight}](${imageUrl})\n\n` : ''
   console.log(`imageeBlock = ${imageBlock}`);
   const infoBlock = showBotInfo ? `${buildInfoTable(botUin, botUid, groupCode)}\n\n` : ''
 

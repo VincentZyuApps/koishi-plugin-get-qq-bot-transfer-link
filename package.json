@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-get-qq-bot-transfer-link",
-  "description": "利用napcat获取官bot的uid，然后获取本群的 开放官bot的全量和主动的配置链接，然后手机qq打开就可以配置了",
+  "description": "利用napcat获取官bot的uid，然后获取本群的 开放官bot的全量和主动的配置链接，然后群主用手机qq打开就可以配置了",
   "version": "0.1.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
