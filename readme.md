@@ -12,17 +12,17 @@
 ## ⚙️ 配置项
 
 | 配置项 | 类型 | 默认值 | 说明 |
-|---|---|---|---|
+|---|---|---|---|---|
 | `useMarkdown` | boolean | `true` | QQ平台使用 Markdown 富文本发送 |
 | `addJumpButton` | boolean | `true` | 消息底部添加「打开配置链接」跳转按钮 |
+| `defaultBotUin` | string | `""` | 默认官Bot QQ号（option 兜底） |
+| `defaultBotUid` | string | `""` | 默认官Bot UID（option 兜底） |
+| `defaultGroupCode` | string | `""` | 默认群号（option 兜底，再兜底到当前群） |
 | `showBotInfo` | boolean | `false` | 消息中显示 botUin / botUid / groupCode |
 | `showImage` | boolean | `true` | 链接/按钮上方附带操作提示图片 |
 | `imageUrl` | string | gitee raw 直链 | 操作提示图片 URL |
 | `imageWidth` | string | `1080px` | Markdown 图片宽度 |
 | `imageHeight` | string | `888px` | Markdown 图片高度 |
-| `defaultBotUin` | string | `""` | 默认官Bot QQ号（option 兜底） |
-| `defaultBotUid` | string | `""` | 默认官Bot UID（option 兜底） |
-| `defaultGroupCode` | string | `""` | 默认群号（option 兜底，再兜底到当前群） |
 
 ## ⌨️ 指令
 
