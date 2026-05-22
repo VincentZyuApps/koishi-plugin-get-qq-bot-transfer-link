@@ -12,7 +12,7 @@
 ## ⚙️ 配置项
 
 | 配置项 | 类型 | 默认值 | 说明 |
-|---|---|---|---|---|
+|---|---|---|---|
 | `useMarkdown` | boolean | `true` | QQ平台使用 Markdown 富文本发送 |
 | `addJumpButton` | boolean | `true` | 消息底部添加「打开配置链接」跳转按钮 |
 | `defaultBotUin` | string | `""` | 默认官Bot QQ号（option 兜底） |
