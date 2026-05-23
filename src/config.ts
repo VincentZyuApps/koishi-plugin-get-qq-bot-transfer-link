@@ -14,6 +14,8 @@ export interface Config {
   defaultBotUid: string
   /** 👥 默认群号 groupCode，作为参数兜底值 */
   defaultGroupCode: string
+  /** 🔒 强制要求传入群号（arg 或 --groupcode），忽略配置项 fallback */
+  requireGroupCode: boolean
   /** 📋 是否在消息中显示 uin / uid / groupCode */
   showBotInfo: boolean
   /** 🖼️ 是否在消息中附带操作提示图片 */
@@ -68,6 +70,14 @@ export const Config: Schema<Config> = Schema.object({
    */
   defaultGroupCode: Schema.string().default('')
     .description('👥 默认群号（groupCode），未传 --groupcode 时兜底使用'),
+
+  /**
+   * 🔒 requireGroupCode — 强制要求传入群号
+   * - true  → 必须通过 arg 或 --groupcode 传入群号，否则报错
+   * - false → 允许 fallback 到配置项或当前会话群号
+   */
+  requireGroupCode: Schema.boolean().default(true)
+    .description('🔒 强制要求传入群号（arg 或 --groupcode），忽略配置项 fallback。提示：可用 onebot 的 inspect 指令获取群号'),
 
   /**
    * 📋 showBotInfo — 显示 Uin/Uid/GroupCode 信息

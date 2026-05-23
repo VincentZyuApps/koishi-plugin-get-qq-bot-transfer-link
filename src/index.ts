@@ -14,15 +14,21 @@ export function apply(ctx: Context, config: Config) {
       await session?.send(`${h.quote(session?.messageId)}用户信息：${JSON.stringify(user)}`)
     })
 
-  ctx.command('qqbot-url', '传参是官bot的QQ号')
+  ctx.command('qqbot-url [groupCodeArg:string]', '传参是官bot的QQ号')
     .option('botuin', '-u <botuin:string> 官Bot的QQ号')
     .option('botuid', '-i <botuid:string> 官Bot的UID')
     .option('groupcode', '-g <groupcode:string> 群号')
-    .action(async ({ session, options }) => {
-      // ── 优先级: option > config > 报错 ──
+    .action(async ({ session, options }, groupCodeArg) => {
+      // ── 优先级: arg > option > config > 报错 ──
       const botUin = options.botuin || config.defaultBotUin
       const botUid = options.botuid || config.defaultBotUid
-      let groupCode = options.groupcode || config.defaultGroupCode || session?.guildId
+      let groupCode: string
+      if (config.requireGroupCode) {
+        groupCode = groupCodeArg || options.groupcode
+        if (!groupCode) return '❌ 请传入QQ群号！可用 arg 直接传入，或使用 --groupcode/-g 选项\n💡 提示：可用 onebot 适配器的 inspect 指令获取频道ID/群组ID'
+      } else {
+        groupCode = groupCodeArg || options.groupcode || config.defaultGroupCode || session?.guildId
+      }
 
       if (!botUin) return '❌ 缺少 botUin（官BotQQ号），请通过 --botuin 传入或配置 defaultBotUin'
       if (!botUid) return '❌ 缺少 botUid（官Bot UID），请通过 --botuid 传入或配置 defaultBotUid'
