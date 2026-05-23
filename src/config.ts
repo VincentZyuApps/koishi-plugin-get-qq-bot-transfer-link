@@ -18,6 +18,8 @@ export interface Config {
   requireGroupCode: boolean
   /** 📋 是否在消息中显示 uin / uid / groupCode */
   showBotInfo: boolean
+  /** 🎨 QQ Markdown 中 bot 信息的显示样式 */
+  qqMarkdownBotInfoStyle: 'text' | 'bold' | 'inline' | 'table'
   /** 🖼️ 是否在消息中附带操作提示图片 */
   showImage: boolean
   /** 🖼️ 操作提示图片的 URL */
@@ -90,6 +92,18 @@ export const Config: Schema<Config> = Schema.object({
    */
   showBotInfo: Schema.boolean().default(true)
     .description('📋 在返回消息中显示当前使用的 botUin / botUid / groupCode 信息'),
+
+  /**
+   * 🎨 qqMarkdownBotInfoStyle — QQ Markdown Bot 信息样式
+   * 控制 showBotInfo 为 true 时信息的展示格式。
+   */
+  qqMarkdownBotInfoStyle: Schema.union([
+    Schema.const('text').description('🆔 botUin：${botUin}\n🔑 botUid：${botUid}\n👥 groupCode：${groupCode}'),
+    Schema.const('bold').description('**🆔 botUin**：${botUin}\n**🔑 botUid**：${botUid}\n**👥 groupCode**：${groupCode}'),
+    Schema.const('inline').description('🆔 ${botUin}  🔑 ${botUid}  👥 ${groupCode}'),
+    Schema.const('table').description('| key | value |\n|---|---|\n| 🆔 botUin | ${botUin} |\n| 🔑 botUid | ${botUid} |\n| 👥 groupCode | ${groupCode} |'),
+  ]).role('radio').default('bold')
+    .description('🎨 QQ Markdown 中 Bot 信息的显示样式（text / bold / inline / table）'),
 
   /**
    * ❌ missingGroupCodeMessage — 缺群号报错提示

@@ -1,4 +1,3 @@
-import { image } from '@satorijs/element/jsx-runtime'
 import { Session } from 'koishi'
 
 declare module 'koishi' {
@@ -10,14 +9,23 @@ declare module 'koishi' {
   }
 }
 
-function buildInfoTable(botUin: string, botUid: string, groupCode: string): string {
-  return [
-    '| 字段 | 值 |',
-    '|---|---|',
-    `| 🆔 botUin | ${botUin} |`,
-    `| 🔑 botUid | ${botUid} |`,
-    `| 👥 groupCode | ${groupCode} |`,
-  ].join('\n')
+function buildInfoTable(botUin: string, botUid: string, groupCode: string, style: string): string {
+  switch (style) {
+    case 'inline':
+      return `🆔 ${botUin}  🔑 ${botUid}  👥 ${groupCode}`
+    case 'text':
+      return `🆔 botUin：${botUin}\n🔑 botUid：${botUid}\n👥 groupCode：${groupCode}`
+    case 'table':
+      return [
+        '| key | value |',
+        '|---|---|',
+        `| 🆔 botUin | ${botUin} |`,
+        `| 🔑 botUid | ${botUid} |`,
+        `| 👥 groupCode | ${groupCode} |`,
+      ].join('\n')
+    default:
+      return `**🆔 botUin**：${botUin}\n**🔑 botUid**：${botUid}\n**👥 groupCode**：${groupCode}`
+  }
 }
 
 export function buildMarkdownMessage(
@@ -32,10 +40,11 @@ export function buildMarkdownMessage(
   botUid: string,
   groupCode: string,
   versionHint: string,
+  botInfoStyle: string,
 ): Record<string, any> {
   const imageBlock = showImage ? `![ #${imageWidth} #${imageHeight}](${imageUrl})\n\n` : ''
   console.log(`imageeBlock = ${imageBlock}`);
-  const infoBlock = showBotInfo ? `${buildInfoTable(botUin, botUid, groupCode)}\n\n` : ''
+  const infoBlock = showBotInfo ? `${buildInfoTable(botUin, botUid, groupCode, botInfoStyle)}\n\n` : ''
 
   const message: Record<string, any> = {
     msg_type: 2,

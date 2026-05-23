@@ -47,7 +47,7 @@ export function apply(ctx: Context, config: Config) {
 
       const isQQ = session?.platform === 'qq'
       if (isQQ && session?.qq && (config.useMarkdown || config.addJumpButton)) {
-        await sendQQMessage(session, buildMarkdownMessage(url, config.addJumpButton, config.showBotInfo, config.showImage, config.imageUrl, config.imageWidth, config.imageHeight, botUin, botUid, groupCode, config.versionHint))
+        await sendQQMessage(session, buildMarkdownMessage(url, config.addJumpButton, config.showBotInfo, config.showImage, config.imageUrl, config.imageWidth, config.imageHeight, botUin, botUid, groupCode, config.versionHint, config.qqMarkdownBotInfoStyle))
       } else {
         const imageBlock = config.showImage ? `${h.image(config.imageUrl)}\n` : ''
         const infoBlock = config.showBotInfo
