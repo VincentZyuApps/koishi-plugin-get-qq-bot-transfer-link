@@ -31,6 +31,7 @@ export function buildMarkdownMessage(
   botUin: string,
   botUid: string,
   groupCode: string,
+  versionHint: string,
 ): Record<string, any> {
   const imageBlock = showImage ? `![ #${imageWidth} #${imageHeight}](${imageUrl})\n\n` : ''
   console.log(`imageeBlock = ${imageBlock}`);
@@ -40,8 +41,8 @@ export function buildMarkdownMessage(
     msg_type: 2,
     markdown: {
       content: addJumpButton
-        ? `## 🔗 官Bot全量主动配置链接\n\n${infoBlock}点击下方按钮打开配置页面。\n\n> 安卓和iOS QQ 9.2.90及以上版本可用。iOS也可以直接去设置里配置。\n\n${imageBlock}`
-        : `${infoBlock}官Bot全量主动配置链接（安卓和iOS QQ 9.2.90及以上版本可用。iOS也可以直接去设置里配置）：\n${imageBlock}${url}`,
+        ? `## 🔗 官Bot全量主动配置链接\n\n${infoBlock}点击下方按钮打开配置页面。\n\n> ${versionHint}\n\n${imageBlock}`
+        : `${infoBlock}官Bot全量主动配置链接（${versionHint}）：\n${imageBlock}${url}`,
     },
   }
 

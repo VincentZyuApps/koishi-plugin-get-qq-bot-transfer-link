@@ -4,6 +4,7 @@ import { buildMarkdownMessage, sendQQMessage } from './qq'
 
 export const name = 'get-qq-bot-transfer-link'
 export { Config }
+export { usage } from './usage'
 
 export function apply(ctx: Context, config: Config) {
 
@@ -25,7 +26,7 @@ export function apply(ctx: Context, config: Config) {
       let groupCode: string
       if (config.requireGroupCode) {
         groupCode = groupCodeArg || options.groupcode
-        if (!groupCode) return '❌ 请传入QQ群号！可用 arg 直接传入，或使用 --groupcode/-g 选项\n💡 提示：可用 onebot 适配器的 inspect 指令获取频道ID/群组ID'
+        if (!groupCode) return `${h.quote(session?.messageId)}${config.missingGroupCodeMessage}`
       } else {
         groupCode = groupCodeArg || options.groupcode || config.defaultGroupCode || session?.guildId
       }
@@ -46,13 +47,13 @@ export function apply(ctx: Context, config: Config) {
 
       const isQQ = session?.platform === 'qq'
       if (isQQ && session?.qq && (config.useMarkdown || config.addJumpButton)) {
-        await sendQQMessage(session, buildMarkdownMessage(url, config.addJumpButton, config.showBotInfo, config.showImage, config.imageUrl, config.imageWidth, config.imageHeight, botUin, botUid, groupCode))
+        await sendQQMessage(session, buildMarkdownMessage(url, config.addJumpButton, config.showBotInfo, config.showImage, config.imageUrl, config.imageWidth, config.imageHeight, botUin, botUid, groupCode, config.versionHint))
       } else {
         const imageBlock = config.showImage ? `${h.image(config.imageUrl)}\n` : ''
         const infoBlock = config.showBotInfo
           ? `🆔 botUin：${botUin}\n🔑 botUid：${botUid}\n👥 groupCode：${groupCode}\n\n`
           : ''
-        await session?.send(`${infoBlock}官Bot全量主动配置链接（安卓和iOS QQ 9.2.90及以上版本可用。iOS也可以直接去设置里配置）：\n${imageBlock}${url}`)
+        await session?.send(`${infoBlock}官Bot全量主动配置链接（${config.versionHint}）：\n${imageBlock}${url}`)
       }
     })
 

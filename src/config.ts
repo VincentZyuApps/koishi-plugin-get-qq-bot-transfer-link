@@ -26,6 +26,10 @@ export interface Config {
   imageWidth: string
   /** 📐 Markdown 图片高度（含 px 单位） */
   imageHeight: string
+  /** ❌ 缺群号时的报错提示文本 */
+  missingGroupCodeMessage: string
+  /** 📱 版本兼容提示文案 */
+  versionHint: string
 }
 
 export const Config: Schema<Config> = Schema.object({
@@ -84,8 +88,27 @@ export const Config: Schema<Config> = Schema.object({
    * - true  → 在返回消息中附加上 uin / uid / groupCode 信息 📊
    * - false → 不显示，仅输出链接 🔗
    */
-  showBotInfo: Schema.boolean().default(false)
+  showBotInfo: Schema.boolean().default(true)
     .description('📋 在返回消息中显示当前使用的 botUin / botUid / groupCode 信息'),
+
+  /**
+   * ❌ missingGroupCodeMessage — 缺群号报错提示
+   * 当 requireGroupCode 为 true 且未传入群号时返回此提示。
+   * 前面会自动拼接 h.quote(session?.messageId)。
+   */
+  missingGroupCodeMessage: Schema.string()
+    .default('❌ 请在指令后面加上群号啦~！ \n❗需要QQ 9.2.90.35975以上 \n❗需要你是群主 \n ⚠️可用 arg 直接传入，或使用 --groupcode/-g 选项\n')
+    .role('textarea', { rows: [2, 5] })
+    .description('❌ 缺群号时返回的报错提示（前面会自动拼接 h.quote）'),
+
+  /**
+   * 📱 versionHint — 版本兼容提示文案
+   * 出现在链接/按钮下方的版本兼容说明文字。
+   */
+  versionHint: Schema.string()
+    .default('安卓和iOS QQ 9.2.90及以上版本可用。iOS也可以直接去设置里配置。')
+    .role('textarea', { rows: [2, 5] })
+    .description('📱 版本兼容提示文案，出现在链接/按钮下方'),
 
   /**
    * 🖼️ showImage — 操作提示图片开关
