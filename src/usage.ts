@@ -79,5 +79,17 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
   <tr><td><code>imageUrl</code></td><td>string</td><td>gitee 直链</td><td>操作提示图片 URL</td></tr>
   <tr><td><code>imageWidth</code></td><td>string</td><td><code>1080px</code></td><td>Markdown 图片宽度</td></tr>
   <tr><td><code>imageHeight</code></td><td>string</td><td><code>888px</code></td><td>Markdown 图片高度</td></tr>
+  <tr><td><code>missingGroupCodeKeyboardJson</code></td><td>string</td><td><code>""</code></td><td>缺群号时键盘按钮 JSON（rows 数组）</td></tr>
 </table>
+
+<h3>🎹 缺群号按钮 JSON 示例</h3>
+
+<p><b>示例1 — 单按钮：重新输入群号（指令按钮）</b></p>
+<pre><code>[{"buttons":[{"id":"retry","render_data":{"label":"🔄 重新输入群号","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"unsupport_tips":"请更新QQ版本"}}]}]</code></pre>
+
+<p><b>示例4 — 多行布局：功能菜单</b></p>
+<pre><code>[{"buttons":[{"id":"m1","render_data":{"label":"📝 带群号重试","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"unsupport_tips":"请更新QQ版本"}},{"id":"m2","render_data":{"label":"📖 使用教程","style":0},"action":{"type":0,"permission":{"type":2},"data":"https://你的教程链接","unsupport_tips":"请更新QQ版本"}}]},{"buttons":[{"id":"m3","render_data":{"label":"💬 加群反馈","style":0},"action":{"type":0,"permission":{"type":2},"data":"https://qm.qq.com/q/你的群链接","unsupport_tips":"请更新QQ版本"}}]}]</code></pre>
+
+<p><b>示例5 — 自动发送：直接使用当前群号（enter:true）</b></p>
+<pre><code>[{"buttons":[{"id":"auto_fill","render_data":{"label":"🏠 使用当前群号","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url","enter":true,"unsupport_tips":"请更新QQ版本"}}]}]</code></pre>
 `

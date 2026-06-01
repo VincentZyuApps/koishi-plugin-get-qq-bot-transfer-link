@@ -30,6 +30,10 @@ export interface Config {
   imageHeight: string
   /** ❌ 缺群号时的报错提示文本 */
   missingGroupCodeMessage: string
+  /** 📝 缺群号时 QQ Markdown 消息的 markdown content */
+  missingGroupCodeMarkdownContent: string
+  /** 🎹 缺群号时 QQ Markdown 消息的 keyboard JSON（为空则不发按钮） */
+  missingGroupCodeKeyboardJson: string
   /** 📱 版本兼容提示文案 */
   versionHint: string
 }
@@ -67,7 +71,7 @@ export const Config: Schema<Config> = Schema.object({
    * 留空且未传参时会报错 ⚠️
    */
   defaultBotUid: Schema.string().default('')
-    .description('🔑 默认官Bot的UID（botUid），未传 --botuid 时兜底使用'),
+    .description('🔑 默认官Bot的UID（botUid），未传 --botuid 时兜底使用 <br/>  <i> <b>建议实践</b>: 用Napcat获取一次官bot的uid，然后就填写在这里，一劳永逸  </i>'),
 
   /**
    * 👥 defaultGroupCode — 默认群号
@@ -114,6 +118,24 @@ export const Config: Schema<Config> = Schema.object({
     .default('❌ 请在指令后面加上群号啦~！ \n❗需要QQ 9.2.90.35975以上 \n❗需要你是群主 \n ⚠️可用 arg 直接传入，或使用 --groupcode/-g 选项\n')
     .role('textarea', { rows: [2, 5] })
     .description('❌ 缺群号时返回的报错提示（前面会自动拼接 h.quote）'),
+
+  /**
+   * 📝 missingGroupCodeMarkdownContent — 缺群号 QQ Markdown 内容
+   * 在 QQ 平台缺群号时作为 markdown.content 发送。
+   */
+  missingGroupCodeMarkdownContent: Schema.string()
+    .default('## ❌ 缺少群号\n\n请在指令后面加上群号啦~！\n\n❗需要QQ 9.2.90.35975以上\n❗需要你是群主\n\n⚠️可用 arg 直接传入，或使用 `--groupcode/-g` 选项')
+    .role('textarea', { rows: [4, 8] })
+    .description('📝 缺群号时 QQ Markdown 消息的 markdown content（仅在 QQ 平台且配置了按钮 JSON 时生效）'),
+
+  /**
+   * 🎹 missingGroupCodeKeyboardJson — 缺群号按钮 JSON
+   * 填入 keyboard content 的 JSON（rows 数组），为空则不发按钮，降级为纯文本。
+   */
+  missingGroupCodeKeyboardJson: Schema.string()
+    .default('{"rows":[{"buttons":[{"id":"help_1","render_data":{"label":"查看帮助(url编码规则)","style":1},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}')
+    .role('textarea', { rows: [5, 20] })
+    .description('🎹 缺群号时 QQ Markdown 消息的 keyboard JSON（填入 rows 数组，为空则不发按钮降级为纯文本）'),
 
   /**
    * 📱 versionHint — 版本兼容提示文案

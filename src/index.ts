@@ -8,7 +8,7 @@ export { usage } from './usage'
 
 export function apply(ctx: Context, config: Config) {
 
-  ctx.command('napcat-getuser [userId:string]', '请在napcat使用这个指令(其他的onebot实现不知道能不能用捏)')
+  ctx.command('napcat-getuser [userId:string]', '请在napcat使用这个指令，userid传参就是官bot的qq号(其他的onebot实现不知道能不能用捏)')
     .action(async ({ session }, userId) => {
       if (session?.platform !== 'onebot') return `${h.quote(session?.messageId)}❌ 仅支持 onebot 平台使用此指令`;
       const user = await session?.bot.internal._request('get_stranger_info', { user_id: userId })
@@ -26,7 +26,24 @@ export function apply(ctx: Context, config: Config) {
       let groupCode: string
       if (config.requireGroupCode) {
         groupCode = groupCodeArg || options.groupcode
-        if (!groupCode) return `${h.quote(session?.messageId)}${config.missingGroupCodeMessage}`
+        if (!groupCode) {
+          const isQQ = session?.platform === 'qq'
+          const hasKeyboard = config.missingGroupCodeKeyboardJson?.trim()
+          if (isQQ && session?.qq && hasKeyboard) {
+            try {
+              const keyboard = JSON.parse(config.missingGroupCodeKeyboardJson)
+              await sendQQMessage(session, {
+                msg_type: 2,
+                markdown: { content: config.missingGroupCodeMarkdownContent },
+                keyboard: { content: keyboard },
+              })
+              return
+            } catch (e) {
+              // JSON 解析失败，降级到纯文本
+            }
+          }
+          return `${h.quote(session?.messageId)}${config.missingGroupCodeMessage}`
+        }
       } else {
         groupCode = groupCodeArg || options.groupcode || config.defaultGroupCode || session?.guildId
       }
