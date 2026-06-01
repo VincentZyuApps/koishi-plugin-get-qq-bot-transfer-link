@@ -15,11 +15,20 @@ export const usage = `
 <hr>
 
 <h2>🔗 相关链接</h2>
-<ul>
-  <li>🟠 <b>Gitee</b>：<a href="https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link">gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link</a></li>
-  <li>⚫ <b>GitHub</b>：<a href="https://github.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link">github.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link</a></li>
-  <li>💬 <b>Koishi 论坛</b>：<a href="https://forum.koishi.xyz/t/topic/12558">forum.koishi.xyz/t/topic/12558</a></li>
-</ul>
+<p>
+  <a href="https://www.npmjs.com/package/koishi-plugin-get-qq-bot-transfer-link" target="_blank">
+    <img src="https://img.shields.io/npm/v/koishi-plugin-get-qq-bot-transfer-link?style=flat-square" alt="npm version">
+  </a>
+  <a href="https://github.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link" target="_blank">
+    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+  </a>
+  <a href="https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link" target="_blank">
+    <img src="https://img.shields.io/badge/Gitee-C71D23?style=for-the-badge&logo=gitee&logoColor=white" alt="Gitee">
+  </a>
+  <a href="https://forum.koishi.xyz/t/topic/12558" target="_blank">
+    <img src="https://img.shields.io/badge/Koishi%20Forum-12558-5546A3?style=for-the-badge&logo=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Ff%2Ff3%2FKoishi.js_Logo.png&logoColor=white" alt="Forum">
+  </a>
+</p>
 
 <hr>
 
