@@ -1,4 +1,8 @@
+![koishi-plugin-get-qq-bot-transfer-link](https://socialify.git.ci/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link/image?custom_description=%F0%9F%A4%96%F0%9F%94%97%E2%9A%99%EF%B8%8F+%E5%88%A9%E7%94%A8NapCat%E8%8E%B7%E5%8F%96%E5%AE%98bot%E7%9A%84uid%EF%BC%8C%E7%84%B6%E5%90%8E%E8%8E%B7%E5%8F%96%E6%9C%AC%E7%BE%A4%E7%9A%84+%E5%BC%80%E6%94%BE%E5%AE%98bot%E7%9A%84%E5%85%A8%E9%87%8F%E5%92%8C%E4%B8%BB%E5%8A%A8%E7%9A%84%E9%85%8D%E7%BD%AE%E9%93%BE%E6%8E%A5%EF%BC%8C%E7%84%B6%E5%90%8E%E7%BE%A4%E4%B8%BB%E7%94%A8%E6%89%8B%E6%9C%BAqq%E6%89%93%E5%BC%80%E5%B0%B1%E5%8F%AF%E4%BB%A5%E9%85%8D%E7%BD%AE%E4%BA%86&description=1&forks=1&issues=1&language=1&logo=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Ff%2Ff3%2FKoishi.js_Logo.png%3F_%3D20230331182243&name=1&owner=1&pulls=1&stargazers=1&theme=Auto)
+
 # koishi-plugin-get-qq-bot-transfer-link
+
+利用NapCat获取官bot的uid，然后获取本群的 开放官bot的全量和主动的配置链接，然后群主用手机qq打开就可以配置了
 
 [![npm](https://img.shields.io/npm/v/koishi-plugin-get-qq-bot-transfer-link?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-get-qq-bot-transfer-link)
 [![npm-download](https://img.shields.io/npm/dm/koishi-plugin-get-qq-bot-transfer-link?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-get-qq-bot-transfer-link)
@@ -7,7 +11,11 @@
 [![Gitee](https://img.shields.io/badge/Gitee-C71D23?style=for-the-badge&logo=gitee&logoColor=white)](https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link)
 [![Koishi Forum](https://img.shields.io/badge/forum.koishi.xyz_topic_12558-5546A3?style=for-the-badge&logo=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Ff%2Ff3%2FKoishi.js_Logo.png&logoColor=white)](https://forum.koishi.xyz/t/topic/12558)
 
-利用NapCat获取官bot的uid，然后获取本群的 开放官bot的全量和主动的配置链接，然后群主用手机qq打开就可以配置了
+<p><del>💬 插件使用问题 / 🐛 Bug反馈 / 👨‍💻 插件开发交流，欢迎加入QQ群：<b>259248174</b>   🎉（这个群G了</del> </p> 
+<p>💬 插件使用问题 / 🐛 Bug反馈 / 👨‍💻 插件开发交流，欢迎加入QQ群：<b>1085190201</b> 🎉</p>
+<p>💡 在群里直接艾特我，回复的更快哦~ ✨</p>
+
+---
 
 ## ⚙️ 配置项
 

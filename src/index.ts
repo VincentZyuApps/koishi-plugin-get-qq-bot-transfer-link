@@ -1,6 +1,6 @@
 import { Context, h } from 'koishi'
 import { Config } from './config'
-import { buildMarkdownMessage, sendQQMessage } from './qq'
+import { buildMarkdownMessage, sendQQMessage, trySendQQMessage } from './qq'
 
 export const name = 'get-qq-bot-transfer-link'
 export { Config }
@@ -29,7 +29,7 @@ export function apply(ctx: Context, config: Config) {
         if (!groupCode) {
           const isQQ = session?.platform === 'qq'
           const hasKeyboard = config.missingGroupCodeKeyboardJson?.trim()
-          if (isQQ && session?.qq && hasKeyboard) {
+          if (isQQ && hasKeyboard) {
             try {
               const keyboard = JSON.parse(config.missingGroupCodeKeyboardJson)
               await sendQQMessage(session, {
@@ -63,15 +63,19 @@ export function apply(ctx: Context, config: Config) {
       const url = `https://club.vip.qq.com/transfer?open_kuikly_info=${encodeURIComponent(JSON.stringify(jsonObj))}`
 
       const isQQ = session?.platform === 'qq'
-      if (isQQ && session?.qq && (config.useMarkdown || config.addJumpButton)) {
-        await sendQQMessage(session, buildMarkdownMessage(url, config.addJumpButton, config.showBotInfo, config.showImage, config.imageUrl, config.imageWidth, config.imageHeight, botUin, botUid, groupCode, config.versionHint, config.qqMarkdownBotInfoStyle))
-      } else {
-        const imageBlock = config.showImage ? `${h.image(config.imageUrl)}\n` : ''
-        const infoBlock = config.showBotInfo
-          ? `🆔 botUin：${botUin}\n🔑 botUid：${botUid}\n👥 groupCode：${groupCode}\n\n`
-          : ''
-        await session?.send(`${infoBlock}官Bot全量主动配置链接（${config.versionHint}）：\n${imageBlock}${url}`)
+      if (isQQ && (config.useMarkdown || config.addJumpButton)) {
+        const sent = await trySendQQMessage(
+          session,
+          buildMarkdownMessage(url, config.addJumpButton, config.showBotInfo, config.showImage, config.imageUrl, config.imageWidth, config.imageHeight, botUin, botUid, groupCode, config.versionHint, config.qqMarkdownBotInfoStyle),
+        )
+        if (sent) return
       }
+
+      const imageBlock = config.showImage ? `${h.image(config.imageUrl)}\n` : ''
+      const infoBlock = config.showBotInfo
+        ? `🆔 botUin：${botUin}\n🔑 botUid：${botUid}\n👥 groupCode：${groupCode}\n\n`
+        : ''
+      await session?.send(`${infoBlock}官Bot全量主动配置链接（${config.versionHint}）：\n${imageBlock}${url}`)
     })
 
 }

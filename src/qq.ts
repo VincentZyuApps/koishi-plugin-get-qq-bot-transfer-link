@@ -1,14 +1,5 @@
 import { Session } from 'koishi'
 
-declare module 'koishi' {
-  interface Session {
-    qq?: {
-      sendMessage(channelId: string, content: unknown): Promise<unknown>
-      sendPrivateMessage(userId: string, content: unknown): Promise<unknown>
-    }
-  }
-}
-
 function buildInfoTable(botUin: string, botUid: string, groupCode: string, style: string): string {
   switch (style) {
     case 'inline':
@@ -43,7 +34,6 @@ export function buildMarkdownMessage(
   botInfoStyle: string,
 ): Record<string, any> {
   const imageBlock = showImage ? `![ #${imageWidth} #${imageHeight}](${imageUrl})\n\n` : ''
-  console.log(`imageeBlock = ${imageBlock}`);
   const infoBlock = showBotInfo ? `${buildInfoTable(botUin, botUid, groupCode, botInfoStyle)}\n\n` : ''
 
   const message: Record<string, any> = {
@@ -78,7 +68,23 @@ export function buildMarkdownMessage(
 }
 
 export async function sendQQMessage(session: Session, message: Record<string, any>): Promise<void> {
-  if (session.qq) {
-    await session.qq.sendMessage(session.channelId, message)
+  if (session.platform !== 'qq') return
+
+  await session.bot.internal.sendMessage(session.channelId, {
+    msg_id: session.messageId,
+    ...message,
+  })
+}
+
+export async function trySendQQMessage(
+  session: Session,
+  message: Record<string, any>,
+): Promise<boolean> {
+  try {
+    await sendQQMessage(session, message)
+    return true
+  } catch (error) {
+    session.app.logger('get-qq-bot-transfer-link').warn('QQ rich message send failed, fallback to plain text: %s', (error as Error)?.message || error)
+    return false
   }
 }
