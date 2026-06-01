@@ -23,7 +23,7 @@
 | `imageUrl` | string | gitee raw 直链 | 操作提示图片 URL |
 | `imageWidth` | string | `1080px` | Markdown 图片宽度 |
 | `imageHeight` | string | `888px` | Markdown 图片高度 |
-| `missingGroupCodeKeyboardJson` | string | `""` | 缺群号时键盘按钮 JSON（rows 数组，为空则纯文本降级） |
+| `missingGroupCodeKeyboardJson` | string | `""` | 缺群号时键盘按钮 JSON（推荐完整 `{"rows":[...]}`，你实测也可用 `[...]`） |
 
 ## ⌨️ 指令
 
@@ -44,19 +44,21 @@
 
 ## 🎹 缺群号按钮 JSON 示例
 
-### 示例1 — 单按钮：重新输入群号（指令按钮）
+下面两种写法你都已经实测可用，推荐优先使用完整对象写法。
+
+### 示例1 - 快速填充指令
 ```json
-[{"buttons":[{"id":"retry","render_data":{"label":"🔄 重新输入群号","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"unsupport_tips":"请更新QQ版本"}}]}]
+{"rows":[{"buttons":[{"id":"cmd_1","render_data":{"label":"重新输入群号(点我快速填入指令)","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}}]}]}
 ```
 
-### 示例4 — 多行布局：功能菜单
+### 示例2 - 跳转网页链接
 ```json
-[{"buttons":[{"id":"m1","render_data":{"label":"📝 带群号重试","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"unsupport_tips":"请更新QQ版本"}},{"id":"m2","render_data":{"label":"📖 使用教程","style":0},"action":{"type":0,"permission":{"type":2},"data":"https://你的教程链接","unsupport_tips":"请更新QQ版本"}}]},{"buttons":[{"id":"m3","render_data":{"label":"💬 加群反馈","style":0},"action":{"type":0,"permission":{"type":2},"data":"https://qm.qq.com/q/你的群链接","unsupport_tips":"请更新QQ版本"}}]}]
+{"rows":[{"buttons":[{"id":"help_1","render_data":{"label":"查看帮助(url编码规则)","style":1},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}
 ```
 
-### 示例5 — 自动发送：直接使用当前群号（enter:true）
+### 示例3 - 两按钮一起
 ```json
-[{"buttons":[{"id":"auto_fill","render_data":{"label":"🏠 使用当前群号","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url","enter":true,"unsupport_tips":"请更新QQ版本"}}]}]
+{"rows":[{"buttons":[{"id":"cmd_2","render_data":{"label":"重新输入群号","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}},{"id":"help_2","render_data":{"label":"查看帮助","style":0},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}
 ```
 
 ## ✨ 效果
