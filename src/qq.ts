@@ -1,4 +1,5 @@
 import { Session } from 'koishi'
+import type { Config } from './config'
 
 function buildInfoTable(botUin: string, botUid: string, groupCode: string, style: string): string {
   switch (style) {
@@ -67,8 +68,12 @@ export function buildMarkdownMessage(
   return message
 }
 
-export async function sendQQMessage(session: Session, message: Record<string, any>): Promise<void> {
+export async function sendQQMessage(session: Session, message: Record<string, any>, config?: Pick<Config, 'verboseConsoleLog'>): Promise<void> {
   if (session.platform !== 'qq') return
+
+  if (config?.verboseConsoleLog) {
+    session.app.logger('get-qq-bot-transfer-link').info('sendQQMessage payload: %o', message)
+  }
 
   if (session.qq) {
     await session.qq.sendMessage(session.channelId, message)
@@ -84,9 +89,10 @@ export async function sendQQMessage(session: Session, message: Record<string, an
 export async function trySendQQMessage(
   session: Session,
   message: Record<string, any>,
+  config?: Pick<Config, 'verboseConsoleLog'>,
 ): Promise<boolean> {
   try {
-    await sendQQMessage(session, message)
+    await sendQQMessage(session, message, config)
     return true
   } catch (error) {
     session.app.logger('get-qq-bot-transfer-link').warn('QQ rich message send failed, fallback to plain text: %s', (error as Error)?.message || error)

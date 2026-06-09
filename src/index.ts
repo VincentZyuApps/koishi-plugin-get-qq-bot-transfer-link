@@ -24,29 +24,67 @@ export function apply(ctx: Context, config: Config) {
       const botUin = options.botuin || config.defaultBotUin
       const botUid = options.botuid || config.defaultBotUid
       let groupCode: string
+      let groupCodeSource = 'unknown'
+      const logGroupCodeSource = () => {
+        if (config.verboseConsoleLog) {
+          ctx.logger('get-qq-bot-transfer-link').info('qqbot-url groupCode群号参数的来源: %s, value: %s', groupCodeSource, groupCode || '<empty>')
+        }
+      }
       if (config.requireGroupCode) {
-        groupCode = groupCodeArg || options.groupcode
+        if (groupCodeArg) {
+          groupCode = groupCodeArg
+          groupCodeSource = 'arg'
+        } else if (options.groupcode) {
+          groupCode = options.groupcode
+          groupCodeSource = 'option.groupcode'
+        }
         if (!groupCode) {
+          groupCodeSource = 'missing'
+          logGroupCodeSource()
           const isQQ = session?.platform === 'qq'
-          const hasKeyboard = config.missingGroupCodeKeyboardJson?.trim()
-          if (isQQ && hasKeyboard) {
-            try {
-              const keyboard = JSON.parse(config.missingGroupCodeKeyboardJson)
-              await sendQQMessage(session, {
+          if (isQQ) {
+            if (config.missingGroupCodeSendMode === 'markdown_button') {
+              const hasKeyboard = config.missingGroupCodeKeyboardJson?.trim()
+              if (hasKeyboard) {
+                try {
+                  const keyboard = JSON.parse(config.missingGroupCodeKeyboardJson)
+                  const sent = await trySendQQMessage(session, {
+                    msg_type: 2,
+                    markdown: { content: config.missingGroupCodeMarkdownContent },
+                    keyboard: { content: keyboard },
+                  }, config)
+                  if (sent) return
+                } catch (e) {
+                  // JSON 解析失败，降级到纯文本
+                }
+              }
+            } else if (config.missingGroupCodeSendMode === 'markdown') {
+              const sent = await trySendQQMessage(session, {
                 msg_type: 2,
                 markdown: { content: config.missingGroupCodeMarkdownContent },
-                keyboard: { content: keyboard },
-              })
-              return
-            } catch (e) {
-              // JSON 解析失败，降级到纯文本
+              }, config)
+              if (sent) return
             }
           }
           return `${h.quote(session?.messageId)}${config.missingGroupCodeMessage}`
         }
       } else {
-        groupCode = groupCodeArg || options.groupcode || config.defaultGroupCode || session?.guildId
+        if (groupCodeArg) {
+          groupCode = groupCodeArg
+          groupCodeSource = 'arg'
+        } else if (options.groupcode) {
+          groupCode = options.groupcode
+          groupCodeSource = 'option.groupcode'
+        } else if (config.defaultGroupCode) {
+          groupCode = config.defaultGroupCode
+          groupCodeSource = 'config.defaultGroupCode'
+        } else if (session?.guildId) {
+          groupCode = session.guildId
+          groupCodeSource = 'session.guildId'
+        }
       }
+
+      logGroupCodeSource()
 
       if (!botUin) return '❌ 缺少 botUin（官BotQQ号），请通过 --botuin 传入或配置 defaultBotUin'
       if (!botUid) return '❌ 缺少 botUid（官Bot UID），请通过 --botuid 传入或配置 defaultBotUid'
@@ -67,6 +105,7 @@ export function apply(ctx: Context, config: Config) {
         const sent = await trySendQQMessage(
           session,
           buildMarkdownMessage(url, config.addJumpButton, config.showBotInfo, config.showImage, config.imageUrl, config.imageWidth, config.imageHeight, botUin, botUid, groupCode, config.versionHint, config.qqMarkdownBotInfoStyle),
+          config,
         )
         if (sent) return
       }

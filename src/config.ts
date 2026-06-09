@@ -4,10 +4,13 @@ import { Schema } from 'koishi'
  * 📋 插件配置项接口
  */
 export interface Config {
+  // ==== 📝 基础发送配置 ====
   /** 📝 是否在 QQ 官方平台使用 Markdown 格式发送消息 */
   useMarkdown: boolean
   /** 🔗 是否在消息末尾添加一个跳转链接按钮 */
   addJumpButton: boolean
+
+  // ==== 🧩 默认参数配置 ====
   /** 🆔 官Bot 的默认 botUin（QQ号），作为参数兜底值 */
   defaultBotUin: string
   /** 🔑 官Bot 的默认 botUid，作为参数兜底值 */
@@ -16,10 +19,14 @@ export interface Config {
   defaultGroupCode: string
   /** 🔒 强制要求传入群号（arg 或 --groupcode），忽略配置项 fallback */
   requireGroupCode: boolean
+
+  // ==== 🎨 配置链接消息样式 ====
   /** 📋 是否在消息中显示 uin / uid / groupCode */
   showBotInfo: boolean
   /** 🎨 QQ Markdown 中 bot 信息的显示样式 */
   qqMarkdownBotInfoStyle: 'text' | 'bold' | 'inline' | 'table'
+
+  // ==== ❌ 缺群号提示配置 ====
   /** 🖼️ 是否在消息中附带操作提示图片 */
   showImage: boolean
   /** 🖼️ 操作提示图片的 URL */
@@ -30,15 +37,25 @@ export interface Config {
   imageHeight: string
   /** ❌ 缺群号时的报错提示文本 */
   missingGroupCodeMessage: string
+  /** 🧭 QQ 平台缺群号时的发送模式 */
+  missingGroupCodeSendMode: 'text' | 'markdown' | 'markdown_button'
   /** 📝 缺群号时 QQ Markdown 消息的 markdown content */
   missingGroupCodeMarkdownContent: string
   /** 🎹 缺群号时 QQ Markdown 消息的 keyboard JSON（为空则不发按钮） */
   missingGroupCodeKeyboardJson: string
+
+  // ==== 🖼️ 图片与说明配置 ====
   /** 📱 版本兼容提示文案 */
   versionHint: string
+
+  // ==== 🐛 调试配置 ====
+  /** 🐛 是否在控制台输出发送 payload */
+  verboseConsoleLog: boolean
 }
 
-export const Config: Schema<Config> = Schema.object({
+export const Config: Schema<Config> = Schema.intersect([
+  // ==== 📝 基础发送配置 ====
+  Schema.object({
   /**
    * 📝 useMarkdown — Markdown 开关
    * - true  → 发送 Markdown 富文本消息（支持链接高亮、排版更美观）✨
@@ -56,7 +73,10 @@ export const Config: Schema<Config> = Schema.object({
    */
   addJumpButton: Schema.boolean().default(true)
     .description('🔗 在QQ官方Bot平台的消息末尾添加一个跳转链接按钮，点击直接打开配置页 🚀'),
+  }).description('==== 📝 基础发送配置 ===='),
 
+  // ==== 🧩 默认参数配置 ====
+  Schema.object({
   /**
    * 🆔 defaultBotUin — 默认官Bot QQ号
    * 当指令未传 --botuin 时使用此值。
@@ -88,7 +108,10 @@ export const Config: Schema<Config> = Schema.object({
    */
   requireGroupCode: Schema.boolean().default(true)
     .description('🔒 强制要求传入群号（arg 或 --groupcode），忽略配置项 fallback。提示：可用 onebot 的 inspect 指令获取群号'),
+  }).description('==== 🧩 默认参数配置 ===='),
 
+  // ==== 🎨 配置链接消息样式 ====
+  Schema.object({
   /**
    * 📋 showBotInfo — 显示 Uin/Uid/GroupCode 信息
    * - true  → 在返回消息中附加上 uin / uid / groupCode 信息 📊
@@ -108,6 +131,22 @@ export const Config: Schema<Config> = Schema.object({
     Schema.const('table').description('| key | value |\n|---|---|\n| 🆔 botUin | ${botUin} |\n| 🔑 botUid | ${botUid} |\n| 👥 groupCode | ${groupCode} |'),
   ]).role('radio').default('bold')
     .description('🎨 QQ Markdown 中 Bot 信息的显示样式（text / bold / inline / table）'),
+  }).description('==== 🎨 配置链接消息样式 ===='),
+
+  // ==== ❌ 缺群号提示配置 ====
+  Schema.object({
+  /**
+   * 🧭 missingGroupCodeSendMode — 缺群号时 QQ 平台发送模式
+   * - text            → 纯文本
+   * - markdown        → 纯 Markdown
+   * - markdown_button → Markdown + 按钮
+   */
+  missingGroupCodeSendMode: Schema.union([
+    Schema.const('text').description('📄 纯文本'),
+    Schema.const('markdown').description('📝 纯 Markdown'),
+    Schema.const('markdown_button').description('🎹 Markdown + 按钮'),
+  ]).role('radio').default('markdown')
+    .description('🧭 QQ 平台缺群号时发送的消息类型（纯文本 / 纯 Markdown / Markdown + 按钮）'),
 
   /**
    * ❌ missingGroupCodeMessage — 缺群号报错提示
@@ -136,7 +175,10 @@ export const Config: Schema<Config> = Schema.object({
     .default('{"rows":[{"buttons":[{"id":"help_1","render_data":{"label":"查看帮助(url编码规则)","style":1},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}')
     .role('textarea', { rows: [5, 20] })
     .description('🎹 缺群号时 QQ Markdown 消息的 keyboard JSON（填入 rows 数组，为空则不发按钮降级为纯文本）'),
+  }).description('==== ❌ 缺群号提示配置 ===='),
 
+  // ==== 🖼️ 图片与说明配置 ====
+  Schema.object({
   /**
    * 📱 versionHint — 版本兼容提示文案
    * 出现在链接/按钮下方的版本兼容说明文字。
@@ -177,4 +219,15 @@ export const Config: Schema<Config> = Schema.object({
    */
   imageHeight: Schema.string().default('888px')
     .description('📐 Markdown 图片高度（含 px 单位，如 888px）'),
-})
+  }).description('==== 🖼️ 图片与说明配置 ===='),
+
+  // ==== 🐛 调试配置 ====
+  Schema.object({
+  /**
+   * 🐛 verboseConsoleLog — 控制台详细日志
+   * 打开后，每次发送 QQ 富消息前都会在控制台输出 payload。
+   */
+  verboseConsoleLog: Schema.boolean().default(false)
+    .description('🐛 在控制台输出每次 sendQQMessage 的具体 payload'),
+  }).description('==== 🐛 调试配置 ====')
+])
