@@ -70,6 +70,11 @@ export function buildMarkdownMessage(
 export async function sendQQMessage(session: Session, message: Record<string, any>): Promise<void> {
   if (session.platform !== 'qq') return
 
+  if (session.qq) {
+    await session.qq.sendMessage(session.channelId, message)
+    return
+  }
+
   await session.bot.internal.sendMessage(session.channelId, {
     msg_id: session.messageId,
     ...message,
