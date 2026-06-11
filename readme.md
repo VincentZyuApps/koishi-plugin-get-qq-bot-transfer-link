@@ -9,11 +9,31 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link)
 [![Gitee](https://img.shields.io/badge/Gitee-C71D23?style=for-the-badge&logo=gitee&logoColor=white)](https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link)
+
 [![Koishi Forum](https://img.shields.io/badge/forum.koishi.xyz_topic_12558-5546A3?style=for-the-badge&logo=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Ff%2Ff3%2FKoishi.js_Logo.png&logoColor=white)](https://forum.koishi.xyz/t/topic/12558)
+[![QQ群](https://img.shields.io/badge/QQ群-1085190201-12B7F5?style=flat-square&logo=qq&logoColor=white)](https://qm.qq.com/q/4vjto4V7Di)
 
 <p><del>💬 插件使用问题 / 🐛 Bug反馈 / 👨‍💻 插件开发交流，欢迎加入QQ群：<b>259248174</b>   🎉（这个群G了</del> </p> 
 <p>💬 插件使用问题 / 🐛 Bug反馈 / 👨‍💻 插件开发交流，欢迎加入QQ群：<b>1085190201</b> 🎉</p>
 <p>💡 在群里直接艾特我，回复的更快哦~ ✨</p>
+
+---
+
+## 📝 Markdown 发送说明
+
+本插件支持在 QQ 官方平台以 **Markdown + 按钮** 格式发送消息，自动检测 adapter 类型选择发送路径。
+
+### 两种场景
+
+| 场景 | 发送内容 |
+|---|---|
+| **传了群号** | Markdown 富文本（botUin/botUid/groupCode 信息 + 操作提示图片）+ 「打开配置链接」跳转按钮 |
+| **缺群号** | 根据 `missingGroupCodeSendMode` 配置，支持三种模式：`text`（纯文本）/ `markdown`（纯 Markdown）/ `markdown_button`（Markdown + 自定义按钮） |
+
+### Adapter 兼容
+
+- **Crack adapter**（`koishi-plugin-adapter-qq-crack`）— 走 `h('qq:rawmarkdown')` 元素层，完整支持自定义 Markdown 内容
+- **官方 adapter**（`@koishijs/plugin-adapter-qq`）— 走 internal API + 手动被动回复上下文（msg_id/msg_seq），也支持 Markdown + 按钮
 
 ---
 
@@ -26,12 +46,19 @@
 | `defaultBotUin` | string | `""` | 默认官Bot QQ号（option 兜底） |
 | `defaultBotUid` | string | `""` | 默认官Bot UID（option 兜底） |
 | `defaultGroupCode` | string | `""` | 默认群号（option 兜底，再兜底到当前群） |
+| `requireGroupCode` | boolean | `true` | 强制要求通过 arg 或 `--groupcode` 传入群号 |
 | `showBotInfo` | boolean | `false` | 消息中显示 botUin / botUid / groupCode |
+| `qqMarkdownBotInfoStyle` | `text`/`bold`/`inline`/`table` | `bold` | Bot 信息在 Markdown 中的展示样式 |
 | `showImage` | boolean | `true` | 链接/按钮上方附带操作提示图片 |
 | `imageUrl` | string | gitee raw 直链 | 操作提示图片 URL |
 | `imageWidth` | string | `1080px` | Markdown 图片宽度 |
 | `imageHeight` | string | `888px` | Markdown 图片高度 |
-| `missingGroupCodeKeyboardJson` | string | `""` | 缺群号时键盘按钮 JSON（推荐完整 `{"rows":[...]}`，你实测也可用 `[...]`） |
+| `missingGroupCodeSendMode` | `text`/`markdown`/`markdown_button` | `markdown` | 缺群号时 QQ 平台的发送模式 |
+| `missingGroupCodeMessage` | string | 见配置页 | 缺群号时的纯文本提示 |
+| `missingGroupCodeMarkdownContent` | string | 见配置页 | 缺群号时的 Markdown 内容 |
+| `missingGroupCodeKeyboardJson` | string | 见配置页 | 缺群号时的自定义按钮 JSON |
+| `versionHint` | string | `安卓和iOS QQ 9.2.90及以上版本可用` | 版本兼容提示文案 |
+| `verboseConsoleLog` | boolean | `false` | 控制台输出每次发送的 payload（调试用） |
 
 ## ⌨️ 指令
 
@@ -48,7 +75,7 @@
 | `--botuid` | `-i` | 官Bot的UID |
 | `--groupcode` | `-g` | 群号 |
 
-**优先级：** `--option 传参` > 配置项兜底值 > 报错提示
+**参数优先级：** `指令 arg` > `--option 传参` > `配置项兜底值` > `当前会话群号` > `报错提示`
 
 ## 🎹 缺群号按钮 JSON 示例
 
