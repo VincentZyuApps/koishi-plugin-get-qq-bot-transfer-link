@@ -57,10 +57,17 @@ export const usage = `
 
 <h3>2️⃣ qqbot-url</h3>
 <p>生成官Bot全量主动配置链接。群主用手机QQ打开链接即可配置。</p>
-<pre><code>qqbot-url                                  # 使用配置项兜底
+<pre><code>
+qqbot-url                                  # 使用配置项兜底
+</code></pre>
+<pre><code>
 qqbot-url &lt;groupCode&gt;                      # arg 传群号
+</code></pre>
+<pre><code>
 qqbot-url -g &lt;groupCode&gt;                   # option 传群号
-qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指定</code></pre>
+</code></pre>
+<pre><code>
+qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指定
 
 <h4>选项列表</h4>
 <table>
@@ -83,26 +90,122 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
   <tr><td><code>defaultBotUin</code></td><td>string</td><td><code>""</code></td><td>默认官Bot QQ号</td></tr>
   <tr><td><code>defaultBotUid</code></td><td>string</td><td><code>""</code></td><td>默认官Bot UID</td></tr>
   <tr><td><code>defaultGroupCode</code></td><td>string</td><td><code>""</code></td><td>默认群号（兜底到当前群）</td></tr>
-  <tr><td><code>showBotInfo</code></td><td>boolean</td><td><code>false</code></td><td>消息中显示 botUin / botUid / groupCode</td></tr>
+  <tr><td><code>showBotInfo</code></td><td>boolean</td><td><code>false</code></td><td>消息中是否显示botUin/botUid/groupCode</td></tr>
   <tr><td><code>showImage</code></td><td>boolean</td><td><code>true</code></td><td>链接上方附带操作提示图片</td></tr>
   <tr><td><code>imageUrl</code></td><td>string</td><td>gitee 直链</td><td>操作提示图片 URL</td></tr>
   <tr><td><code>imageWidth</code></td><td>string</td><td><code>1080px</code></td><td>Markdown 图片宽度</td></tr>
   <tr><td><code>imageHeight</code></td><td>string</td><td><code>888px</code></td><td>Markdown 图片高度</td></tr>
-  <tr><td><code>missingGroupCodeKeyboardJson</code></td><td>string</td><td><code>""</code></td><td>缺群号时键盘按钮 JSON（建议填完整 <code>{&quot;rows&quot;:[...]}</code>，你实测也可用 <code>[...]</code>）</td></tr>
+  <tr><td><code>missingGroupCodeKeyboardJson</code></td><td>string</td><td><code>""</code></td><td>缺群号时键盘按钮JSON</td></tr>
 </table>
 
 <h3> 缺群号按钮 JSON 示例</h3>
 
 <p><b>示例1 - 快速填充指令</b></p>
-<p><code>{"rows":[{"buttons":[{"id":"cmd_1","render_data":{"label":"🔢重新输入群号(点我快速填入指令)","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}}]}]}</code></p>
+<pre><code>{
+  "rows": [{
+    "buttons": [{
+      "id": "cmd_1",
+      "render_data": {
+        "label": "🔢重新输入群号(点我快速填入指令)",
+        "style": 1
+      },
+      "action": {
+        "type": 2,
+        "permission": { "type": 2 },
+        "data": "qqbot-url -g ",
+        "enter": false,
+        "reply": false,
+        "unsupport_tips": "请更新QQ版本后使用"
+      }
+    }]
+  }]
+}</code></pre>
 
 <p><b>示例2 - 跳转网页链接</b></p>
-<p><code>{"rows":[{"buttons":[{"id":"help_1","render_data":{"label":"❓查看帮助(url编码规则)","style":1},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}</code></p>
+<pre><code>{
+  "rows": [{
+    "buttons": [{
+      "id": "help_1",
+      "render_data": {
+        "label": "❓查看帮助(url编码规则)",
+        "style": 1
+      },
+      "action": {
+        "type": 0,
+        "permission": { "type": 2 },
+        "data": "https://forum.koishi.xyz/t/topic/12558",
+        "unsupport_tips": "请更新QQ版本后使用"
+      }
+    }]
+  }]
+}</code></pre>
 
 <p><b>示例3 - 两按钮一起</b></p>
-<p><code>{"rows":[{"buttons":[{"id":"cmd_2","render_data":{"label":"🔢重新输入群号","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}},{"id":"help_2","render_data":{"label":"❓查看帮助","style":0},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}</code></p>
+<pre><code>{
+  "rows": [{
+    "buttons": [
+      {
+        "id": "cmd_2",
+        "render_data": {
+          "label": "🔢重新输入群号",
+          "style": 1
+        },
+        "action": {
+          "type": 2,
+          "permission": { "type": 2 },
+          "data": "qqbot-url -g ",
+          "enter": false,
+          "reply": false,
+          "unsupport_tips": "请更新QQ版本后使用"
+        }
+      },
+      {
+        "id": "help_2",
+        "render_data": {
+          "label": "❓查看帮助",
+          "style": 0
+        },
+        "action": {
+          "type": 0,
+          "permission": { "type": 2 },
+          "data": "https://forum.koishi.xyz/t/topic/12558",
+          "unsupport_tips": "请更新QQ版本后使用"
+        }
+      }
+    ]
+  }]
+}</code></pre>
 
 <p><b>示例4 - 自定义操作按钮（不带 id）</b></p>
-<p><code>{"rows":[{"buttons":[{"render_data":{"label":"📝再试一次","style":1},"action":{"type":2,"permission":{"type":2},"data":"/免艾特申请","enter":true}},{"render_data":{"label":"🎈玩玩其他的","style":1},"action":{"type":2,"permission":{"type":2},"data":"/帮助菜单","enter":true}}]}]}</code></p>
+<pre><code>{
+  "rows": [{
+    "buttons": [
+      {
+        "render_data": {
+          "label": "📝再试一次",
+          "style": 1
+        },
+        "action": {
+          "type": 2,
+          "permission": { "type": 2 },
+          "data": "/免艾特申请",
+          "enter": true
+        }
+      },
+      {
+        "render_data": {
+          "label": "🎈玩玩其他的",
+          "style": 1
+        },
+        "action": {
+          "type": 2,
+          "permission": { "type": 2 },
+          "data": "/help",
+          "enter": true
+        }
+      }
+    ]
+  }]
+}</code></pre>
 
 `

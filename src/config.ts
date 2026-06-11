@@ -172,9 +172,9 @@ export const Config: Schema<Config> = Schema.intersect([
    * 填入 keyboard content 的 JSON（rows 数组），为空则不发按钮，降级为纯文本。
    */
   missingGroupCodeKeyboardJson: Schema.string()
-    .default('{"rows":[{"buttons":[{"render_data":{"label":"📝再试一次","style":1},"action":{"type":2,"permission":{"type":2},"data":"/免艾特申请","enter":true}},{"render_data":{"label":"🎈玩玩其他的","style":1},"action":{"type":2,"permission":{"type":2},"data":"/帮助菜单","enter":true}}]}]}')
+    .default('{"rows":[{"buttons":[{"render_data":{"label":"📝再试一次","style":1},"action":{"type":2,"permission":{"type":2},"data":"/免艾特申请","enter":true}},{"render_data":{"label":"🎈玩玩其他的","style":1},"action":{"type":2,"permission":{"type":2},"data":"/help","enter":true}}]}]}')
     .role('textarea', { rows: [5, 20] })
-    .description('🎹 缺群号时 QQ Markdown 消息的 keyboard JSON（填入 rows 数组，为空则不发按钮降级为纯文本）'),
+    .description('🎹 缺群号时 QQ Markdown 消息的 keyboard JSON（填入 rows 数组，为空则不发按钮降级为纯文本）。<br/><i>可以参考 readme 或者上方 WebUI 的 usage 页面获取 JSON 格式示范</i>'),
   }).description('==== ❌ 缺群号提示配置 ===='),
 
   // ==== 🖼️ 图片与说明配置 ====
