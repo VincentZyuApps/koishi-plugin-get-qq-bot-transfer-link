@@ -1,101 +1,121 @@
-import { Session } from 'koishi'
+import { h, Session } from 'koishi'
 import type { Config } from './config'
+import type { QQKeyboardContent, QQKeyboardRow } from './types'
 
-function buildInfoTable(botUin: string, botUid: string, groupCode: string, style: string): string {
-  switch (style) {
-    case 'inline':
-      return `🆔 ${botUin}  🔑 ${botUid}  👥 ${groupCode}`
-    case 'text':
-      return `🆔 botUin：${botUin}\n🔑 botUid：${botUid}\n👥 groupCode：${groupCode}`
-    case 'table':
-      return [
-        '| key | value |',
-        '|---|---|',
-        `| 🆔 botUin | ${botUin} |`,
-        `| 🔑 botUid | ${botUid} |`,
-        `| 👥 groupCode | ${groupCode} |`,
-      ].join('\n')
-    default:
-      return `**🆔 botUin**：${botUin}\n**🔑 botUid**：${botUid}\n**👥 groupCode**：${groupCode}`
-  }
+function isKeyboardRows(value: unknown): value is QQKeyboardRow[] {
+  return Array.isArray(value)
 }
 
-export function buildMarkdownMessage(
-  url: string,
-  addJumpButton: boolean,
-  showBotInfo: boolean,
-  showImage: boolean,
-  imageUrl: string,
-  imageWidth: string,
-  imageHeight: string,
-  botUin: string,
-  botUid: string,
-  groupCode: string,
-  versionHint: string,
-  botInfoStyle: string,
-): Record<string, any> {
-  const imageBlock = showImage ? `![ #${imageWidth} #${imageHeight}](${imageUrl})\n\n` : ''
-  const infoBlock = showBotInfo ? `${buildInfoTable(botUin, botUid, groupCode, botInfoStyle)}\n\n` : ''
+export function normalizeKeyboardContent(input: unknown): QQKeyboardContent | undefined {
+  if (!input) return undefined
 
-  const message: Record<string, any> = {
-    msg_type: 2,
-    markdown: {
-      content: addJumpButton
-        ? `## 🔗 官Bot全量主动配置链接\n\n${infoBlock}点击下方按钮打开配置页面。\n\n> ${versionHint}\n\n${imageBlock}`
-        : `${infoBlock}官Bot全量主动配置链接（${versionHint}）：\n${imageBlock}${url}`,
-    },
+  if (isKeyboardRows(input)) {
+    return { rows: input }
   }
 
-  if (addJumpButton) {
-    message.keyboard = {
-      content: {
-        rows: [{
-          buttons: [{
+  if (typeof input !== 'object') return undefined
+
+  const value = input as Record<string, unknown>
+
+  if (isKeyboardRows(value.rows)) {
+    return { rows: value.rows }
+  }
+
+  const content = value.content
+  if (content && typeof content === 'object') {
+    const nested = content as Record<string, unknown>
+    if (isKeyboardRows(nested.rows)) {
+      return { rows: nested.rows }
+    }
+  }
+
+  return undefined
+}
+
+export function parseKeyboardJson(json: string): QQKeyboardContent | undefined {
+  const trimmed = json?.trim()
+  if (!trimmed) return undefined
+
+  return normalizeKeyboardContent(JSON.parse(trimmed))
+}
+
+export function buildJumpKeyboard(url: string): QQKeyboardContent {
+  return {
+    rows: [
+      {
+        buttons: [
+          {
             id: 'jump',
-            render_data: { label: '🌐 打开配置链接', style: 1 },
+            render_data: {
+              label: '🌐 打开配置链接',
+              style: 1,
+            },
             action: {
               type: 0,
               permission: { type: 2 },
               data: url,
               unsupport_tips: '请更新QQ版本后使用',
             },
-          }],
-        }],
+          },
+        ],
       },
+    ],
+  }
+}
+
+export function buildRawMarkdownElement(
+  markdownContent: string,
+  keyboard?: QQKeyboardContent,
+) {
+  const payload: Record<string, unknown> = {
+    markdown: {
+      content: markdownContent,
+    },
+  }
+
+  if (keyboard?.rows?.length) {
+    payload.keyboard = {
+      content: keyboard,
     }
   }
 
-  return message
+  return h('qq:rawmarkdown', payload)
 }
 
-export async function sendQQMessage(session: Session, message: Record<string, any>, config?: Pick<Config, 'verboseConsoleLog'>): Promise<void> {
+export async function sendQQRawMarkdown(
+  session: Session,
+  markdownContent: string,
+  keyboard?: QQKeyboardContent,
+  config?: Pick<Config, 'verboseConsoleLog'>,
+): Promise<void> {
   if (session.platform !== 'qq') return
 
+  const element = buildRawMarkdownElement(markdownContent, keyboard)
+
   if (config?.verboseConsoleLog) {
-    session.app.logger('get-qq-bot-transfer-link').info('sendQQMessage payload: %o', message)
+    session.app.logger('get-qq-bot-transfer-link').info('sendQQRawMarkdown element: %o', element)
   }
 
-  if (session.qq) {
-    await session.qq.sendMessage(session.channelId, message)
-    return
-  }
-
-  await session.bot.internal.sendMessage(session.channelId, {
-    msg_id: session.messageId,
-    ...message,
-  })
+  await session.send(element)
 }
 
-export async function trySendQQMessage(
+export async function trySendQQRawMarkdown(
   session: Session,
-  message: Record<string, any>,
+  markdownContent: string,
+  keyboard?: QQKeyboardContent,
   config?: Pick<Config, 'verboseConsoleLog'>,
 ): Promise<boolean> {
   try {
-    await sendQQMessage(session, message, config)
+    await sendQQRawMarkdown(session, markdownContent, keyboard, config)
     return true
   } catch (error) {
-    session.app.logger('get-qq-bot-transfer-link').warn('QQ rich message send failed, fallback to plain text: %s', (error as Error)?.message || error)
+    session.app
+      .logger('get-qq-bot-transfer-link')
+      .warn(
+        'QQ rawmarkdown send failed, fallback to plain text: %s',
+        (error as Error)?.message || error,
+      )
+
     return false
   }
 }
