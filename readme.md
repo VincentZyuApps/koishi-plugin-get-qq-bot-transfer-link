@@ -52,21 +52,24 @@
 
 ## 🎹 缺群号按钮 JSON 示例
 
-下面两种写法你都已经实测可用，推荐优先使用完整对象写法。
-
 ### 示例1 - 快速填充指令
 ```json
-{"rows":[{"buttons":[{"id":"cmd_1","render_data":{"label":"重新输入群号(点我快速填入指令)","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}}]}]}
+{"rows":[{"buttons":[{"id":"cmd_1","render_data":{"label":"🔢重新输入群号(点我快速填入指令)","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}}]}]}
 ```
 
 ### 示例2 - 跳转网页链接
 ```json
-{"rows":[{"buttons":[{"id":"help_1","render_data":{"label":"查看帮助(url编码规则)","style":1},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}
+{"rows":[{"buttons":[{"id":"help_1","render_data":{"label":"❓查看帮助(url编码规则)","style":1},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}
 ```
 
 ### 示例3 - 两按钮一起
 ```json
-{"rows":[{"buttons":[{"id":"cmd_2","render_data":{"label":"重新输入群号","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}},{"id":"help_2","render_data":{"label":"查看帮助","style":0},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}
+{"rows":[{"buttons":[{"id":"cmd_2","render_data":{"label":"🔢重新输入群号","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}},{"id":"help_2","render_data":{"label":"❓查看帮助","style":0},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}
+```
+
+### 示例4 - 自定义操作按钮（不带 id）
+```json
+{"rows":[{"buttons":[{"render_data":{"label":"📝再试一次","style":1},"action":{"type":2,"permission":{"type":2},"data":"/免艾特申请","enter":true}},{"render_data":{"label":"🎈玩玩其他的","style":1},"action":{"type":2,"permission":{"type":2},"data":"/帮助菜单","enter":true}}]}]}
 ```
 
 ## ✨ 效果

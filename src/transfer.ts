@@ -7,6 +7,8 @@ import type {
   TransferPayload,
 } from './types'
 
+// ============ 🔗 配置链接构建 ============
+/** 构建官 Bot 全量主动配置链接 URL */
 export function buildTransferUrl(identity: BotIdentity): string {
   const payload: TransferPayload = {
     page_name: 'ai_group_service_agreement_pop_page',
@@ -19,6 +21,9 @@ export function buildTransferUrl(identity: BotIdentity): string {
   return `https://club.vip.qq.com/transfer?open_kuikly_info=${encodeURIComponent(JSON.stringify(payload))}`
 }
 
+// ============ 🆔 Bot 身份解析 ============
+/** 按优先级解析 Bot 身份信息（botUin / botUid / groupCode），
+ *  优先级：arg > option > config > session.guildId */
 export function resolveBotIdentity(
   session: any,
   config: Config,

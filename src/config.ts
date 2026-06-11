@@ -172,7 +172,7 @@ export const Config: Schema<Config> = Schema.intersect([
    * 填入 keyboard content 的 JSON（rows 数组），为空则不发按钮，降级为纯文本。
    */
   missingGroupCodeKeyboardJson: Schema.string()
-    .default('{"rows":[{"buttons":[{"id":"help_1","render_data":{"label":"查看帮助(url编码规则)","style":1},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}')
+    .default('{"rows":[{"buttons":[{"render_data":{"label":"📝再试一次","style":1},"action":{"type":2,"permission":{"type":2},"data":"/免艾特申请","enter":true}},{"render_data":{"label":"🎈玩玩其他的","style":1},"action":{"type":2,"permission":{"type":2},"data":"/帮助菜单","enter":true}}]}]}')
     .role('textarea', { rows: [5, 20] })
     .description('🎹 缺群号时 QQ Markdown 消息的 keyboard JSON（填入 rows 数组，为空则不发按钮降级为纯文本）'),
   }).description('==== ❌ 缺群号提示配置 ===='),
