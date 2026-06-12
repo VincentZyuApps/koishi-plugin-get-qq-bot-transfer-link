@@ -25,6 +25,9 @@ export const usage = `
   <a href="https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link" target="_blank">
     <img src="https://img.shields.io/badge/Gitee-C71D23?style=for-the-badge&logo=gitee&logoColor=white" alt="Gitee">
   </a>
+  <a href="https://qm.qq.com/q/ZN7fxZ3qCq" target="_blank">
+    <img src="https://img.shields.io/badge/QQ群-1085190201-1AAD19?style=flat-square" alt="QQ群">
+  </a>
   <a href="https://forum.koishi.xyz/t/topic/12558" target="_blank">
     <img src="https://img.shields.io/badge/Koishi%20Forum-12558-5546A3?style=for-the-badge&logo=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Ff%2Ff3%2FKoishi.js_Logo.png&logoColor=white" alt="Forum">
   </a>
