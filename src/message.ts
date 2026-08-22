@@ -27,8 +27,8 @@ export function buildTransferMarkdown(
   config: Config,
 ): string {
   const { botUin, botUid, groupCode } = identity
-  const imageBlock = config.showImage
-    ? `![ #${config.imageWidth} #${config.imageHeight}](${config.imageUrl})\n\n`
+  const imageBlock = config.showTransferLinkGuideImage
+    ? `![ #${config.transferLinkGuideImageWidth} #${config.transferLinkGuideImageHeight}](${config.transferLinkGuideImageUrl})\n\n`
     : ''
   const infoBlock = config.showBotInfo
     ? `${buildInfoTable(botUin, botUid, groupCode, config.qqMarkdownBotInfoStyle)}\n\n`
@@ -47,10 +47,28 @@ export function buildTransferPlainText(
   config: Config,
 ): string {
   const { botUin, botUid, groupCode } = identity
-  const imageBlock = config.showImage ? `${h.image(config.imageUrl)}\n` : ''
+  const imageBlock = config.showTransferLinkGuideImage
+    ? `${h.image(config.transferLinkGuideImageUrl)}\n`
+    : ''
   const infoBlock = config.showBotInfo
     ? `🆔 botUin：${botUin}\n🔑 botUid：${botUid}\n👥 groupCode：${groupCode}\n\n`
     : ''
 
   return `${infoBlock}官Bot全量主动配置链接（${config.versionHint}）：\n${imageBlock}${url}`
+}
+
+export function buildQQSettingsGuideMarkdown(config: Config): string {
+  const image = `![ #${config.qqSettingsGuideImageWidth} #${config.qqSettingsGuideImageHeight}](${config.qqSettingsGuideImageUrl})`
+  return config.qqSettingsGuideText ? `${image}\n\n${config.qqSettingsGuideText}` : image
+}
+
+export function buildQQSettingsGuideElements(
+  messageId: string | undefined,
+  config: Config,
+) {
+  const elements = []
+  if (messageId) elements.push(h.quote(messageId))
+  elements.push(h.image(config.qqSettingsGuideImageUrl))
+  if (config.qqSettingsGuideText) elements.push(config.qqSettingsGuideText)
+  return elements
 }

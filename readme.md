@@ -50,10 +50,14 @@
 | `requireGroupCode` | boolean | `true` | 强制要求通过 arg 或 `--groupcode` 传入群号 |
 | `showBotInfo` | boolean | `false` | 消息中显示 botUin / botUid / groupCode |
 | `qqMarkdownBotInfoStyle` | `text`/`bold`/`inline`/`table` | `bold` | Bot 信息在 Markdown 中的展示样式 |
-| `showImage` | boolean | `true` | 链接/按钮上方附带操作提示图片 |
-| `imageUrl` | string | gitee raw 直链 | 操作提示图片 URL |
-| `imageWidth` | string | `1080px` | Markdown 图片宽度 |
-| `imageHeight` | string | `888px` | Markdown 图片高度 |
+| `showTransferLinkGuideImage` | boolean | `true` | 迁移链接上方附带操作提示图片 |
+| `transferLinkGuideImageUrl` | string | gitee raw 直链 | 迁移链接操作提示图片 URL |
+| `transferLinkGuideImageWidth` | string | `1080px` | 迁移链接 Markdown 图片宽度 |
+| `transferLinkGuideImageHeight` | string | `888px` | 迁移链接 Markdown 图片高度 |
+| `qqSettingsGuideImageUrl` | string | gitee raw 直链 | 手机QQ手动配置指南图片 URL |
+| `qqSettingsGuideImageWidth` | string | `1871px` | 手动配置指南 Markdown 图片宽度 |
+| `qqSettingsGuideImageHeight` | string | `1044px` | 手动配置指南 Markdown 图片高度 |
+| `qqSettingsGuideText` | string | 见配置页 | 手动配置指南图片下方的说明文字 |
 | `missingGroupCodeSendMode` | `text`/`markdown`/`markdown_button` | `markdown` | 缺群号时 QQ 平台的发送模式 |
 | `missingGroupCodeMessage` | string | 见配置页 | 缺群号时的纯文本提示 |
 | `missingGroupCodeMarkdownContent` | string | 见配置页 | 缺群号时的 Markdown 内容 |
@@ -69,6 +73,8 @@
 ### `qqbot-url`
 生成官Bot全量主动配置链接。
 
+**别名：** `免艾特申请`、`一键跳转免艾特配置`、`一键跳转全量主动配置`
+
 **选项：**
 | 选项 | 缩写 | 说明 |
 |---|---|---|
@@ -77,6 +83,13 @@
 | `--groupcode` | `-g` | 群号 |
 
 **参数优先级：** `指令 arg` > `--option 传参` > `配置项兜底值` > `当前会话群号` > `报错提示`
+
+### `qqbot-guide`
+发送手机QQ机器人全量消息与主动发言手动配置指南。
+
+**别名：** `免艾特手动配置指南`、`全量主动手动配置指南`
+
+QQ 平台开启 `useMarkdown` 时发送内嵌图片的 Markdown；关闭后以及非 QQ 平台发送通用的引用、图片和文字消息段。
 
 ## 🎹 缺群号按钮 JSON 示例
 
@@ -95,13 +108,13 @@
 {"rows":[{"buttons":[{"id":"cmd_2","render_data":{"label":"🔢重新输入群号","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}},{"id":"help_2","render_data":{"label":"❓查看帮助","style":0},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}
 ```
 
-### 示例4 - 自定义操作按钮（不带 id）
+### 示例4 - 一键跳转与手动配置指南
 ```json
-{"rows":[{"buttons":[{"render_data":{"label":"📝再试一次","style":1},"action":{"type":2,"permission":{"type":2},"data":"/免艾特申请","enter":true}},{"render_data":{"label":"🎈玩玩其他的","style":1},"action":{"type":2,"permission":{"type":2},"data":"/help","enter":true}}]}]}
+{"rows":[{"buttons":[{"render_data":{"label":"一键跳转免艾特","style":1},"action":{"type":2,"permission":{"type":2},"data":"/一键跳转免艾特配置 【在这里填入群号】","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}},{"render_data":{"label":"免艾特手动配置指南","style":1},"action":{"type":2,"permission":{"type":2},"data":"/免艾特手动配置指南","enter":true,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}}]}]}
 ```
 
 ## ✨ 效果
-![1.png](doc/preview-image/1.png)
-![2.png](doc/preview-image/2.png)
-![3.png](doc/preview-image/3.png)
-![4.png](doc/preview-image/4.png)
+![1.png](doc/images/preview/1.png)
+![2.png](doc/images/preview/2.png)
+![3.png](doc/images/preview/3.png)
+![4.png](doc/images/preview/4.png)

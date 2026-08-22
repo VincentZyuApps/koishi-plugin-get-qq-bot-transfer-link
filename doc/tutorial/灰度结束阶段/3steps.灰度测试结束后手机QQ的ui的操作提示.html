@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>手机QQ的ui中群主配置机器人全量消息与主动发言行为 - 三步教程</title>
+  <style>
+    @font-face {
+      font-family: "LXGW WenKai Mono";
+      src: url("../../../../../data/fonts/LXGWWenKaiMono-Regular.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    :root {
+      color-scheme: light;
+      font-family: "LXGW WenKai Mono", "Microsoft YaHei", sans-serif;
+      color: #17202b;
+      background: #f4f6f8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-width: 1120px;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 34px 42px 38px;
+      background: #f4f6f8;
+    }
+
+    .page {
+      width: min(1740px, 100%);
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 36px;
+      margin-bottom: 24px;
+      padding: 0 2px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .notice {
+      flex: 0 0 auto;
+      margin: 0 0 3px;
+      padding-left: 16px;
+      border-left: 4px solid #7459ff;
+      color: #425466;
+      font-size: 18px;
+      line-height: 1.5;
+      white-space: nowrap;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      align-items: start;
+    }
+
+    .step {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid #d8dee5;
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 8px 22px rgba(23, 32, 43, 0.08);
+    }
+
+    .step-heading {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      height: 112px;
+      padding: 13px 17px;
+      border-bottom: 1px solid #e4e8ed;
+    }
+
+    .step-number {
+      display: grid;
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 50%;
+      background: #12b7f5;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .step-title {
+      margin: 0;
+      color: #1f2937;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .shot {
+      display: flex;
+      height: min(740px, calc(100vh - 195px));
+      min-height: 560px;
+      align-items: flex-start;
+      justify-content: center;
+      overflow: hidden;
+      background: #0a0a0b;
+    }
+
+    .shot img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: top center;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <h1>手机QQ的ui中群主配置机器人全量消息与主动发言行为</h1>
+      <p class="notice">腾讯现已全量开放，由群主进入机器人设置后按以下三步配置</p>
+    </header>
+
+    <section class="steps" aria-label="QQ 群机器人设置步骤">
+      <article class="step">
+        <div class="step-heading">
+          <span class="step-number" aria-hidden="true">1</span>
+          <h2 class="step-title">群主打开群成员列表，在“机器人”分组中找到需要配置的机器人</h2>
+        </div>
+        <div class="shot">
+          <img src="step1.群成员列表里面找到bot.png" alt="在 QQ 群成员列表中找到机器人">
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-heading">
+          <span class="step-number" aria-hidden="true">2</span>
+          <h2 class="step-title">进入机器人资料页，点击右上角的齿轮图标打开设置</h2>
+        </div>
+        <div class="shot">
+          <img src="step2.bot页面右上角点击齿轮图标.png" alt="在机器人资料页点击右上角的齿轮图标">
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-heading">
+          <span class="step-number" aria-hidden="true">3</span>
+          <h2 class="step-title">将消息范围设为“获取群内全部消息”，并按需开启“机器人主动在群聊内发言”</h2>
+        </div>
+        <div class="shot">
+          <img src="step3.调整这里的设置即可.第一个是全量.第二个是主动.png" alt="调整机器人可获取的群聊消息范围和主动发言设置">
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

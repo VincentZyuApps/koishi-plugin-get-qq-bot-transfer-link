@@ -71,6 +71,9 @@ qqbot-url -g &lt;groupCode&gt;                   # option 传群号
 </code></pre>
 <pre><code>
 qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指定
+</code></pre>
+
+<p><b>别名：</b><code>免艾特申请</code>、<code>一键跳转免艾特配置</code>、<code>一键跳转全量主动配置</code></p>
 
 <h4>选项列表</h4>
 <table>
@@ -83,6 +86,12 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
 <h4>参数优先级</h4>
 <p><code>指令 arg</code> > <code>--option 传参</code> > <code>配置项兜底值</code> > <code>报错提示</code></p>
 
+<h3>3️⃣ qqbot-guide</h3>
+<p>发送手机QQ机器人全量消息与主动发言手动配置指南。</p>
+<pre><code>qqbot-guide</code></pre>
+<p><b>别名：</b><code>免艾特手动配置指南</code>、<code>全量主动手动配置指南</code></p>
+<p>QQ 平台开启 <code>useMarkdown</code> 时发送内嵌图片的 Markdown；关闭后以及非 QQ 平台发送通用的引用、图片和文字消息段。</p>
+
 <hr>
 
 <h2>⚙️ 配置项</h2>
@@ -94,11 +103,15 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
   <tr><td><code>defaultBotUid</code></td><td>string</td><td><code>""</code></td><td>默认官Bot UID</td></tr>
   <tr><td><code>defaultGroupCode</code></td><td>string</td><td><code>""</code></td><td>默认群号（兜底到当前群）</td></tr>
   <tr><td><code>showBotInfo</code></td><td>boolean</td><td><code>false</code></td><td>消息中是否显示botUin/botUid/groupCode</td></tr>
-  <tr><td><code>showImage</code></td><td>boolean</td><td><code>true</code></td><td>链接上方附带操作提示图片</td></tr>
-  <tr><td><code>imageUrl</code></td><td>string</td><td>gitee 直链</td><td>操作提示图片 URL</td></tr>
-  <tr><td><code>imageWidth</code></td><td>string</td><td><code>1080px</code></td><td>Markdown 图片宽度</td></tr>
-  <tr><td><code>imageHeight</code></td><td>string</td><td><code>888px</code></td><td>Markdown 图片高度</td></tr>
-  <tr><td><code>missingGroupCodeKeyboardJson</code></td><td>string</td><td><code>""</code></td><td>缺群号时键盘按钮JSON</td></tr>
+  <tr><td><code>showTransferLinkGuideImage</code></td><td>boolean</td><td><code>true</code></td><td>迁移链接上方附带操作提示图片</td></tr>
+  <tr><td><code>transferLinkGuideImageUrl</code></td><td>string</td><td>gitee 直链</td><td>迁移链接操作提示图片 URL</td></tr>
+  <tr><td><code>transferLinkGuideImageWidth</code></td><td>string</td><td><code>1080px</code></td><td>迁移链接 Markdown 图片宽度</td></tr>
+  <tr><td><code>transferLinkGuideImageHeight</code></td><td>string</td><td><code>888px</code></td><td>迁移链接 Markdown 图片高度</td></tr>
+  <tr><td><code>qqSettingsGuideImageUrl</code></td><td>string</td><td>gitee 直链</td><td>手机QQ手动配置指南图片 URL</td></tr>
+  <tr><td><code>qqSettingsGuideImageWidth</code></td><td>string</td><td><code>1871px</code></td><td>指南 Markdown 图片宽度</td></tr>
+  <tr><td><code>qqSettingsGuideImageHeight</code></td><td>string</td><td><code>1044px</code></td><td>指南 Markdown 图片高度</td></tr>
+  <tr><td><code>qqSettingsGuideText</code></td><td>string</td><td>见配置页</td><td>指南图片下方的说明文字</td></tr>
+  <tr><td><code>missingGroupCodeKeyboardJson</code></td><td>string</td><td>见配置页</td><td>缺群号时键盘按钮JSON</td></tr>
 </table>
 
 <h3> 缺群号按钮 JSON 示例</h3>
@@ -179,32 +192,36 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
   }]
 }</code></pre>
 
-<p><b>示例4 - 自定义操作按钮（不带 id）</b></p>
+<p><b>示例4 - 一键跳转与手动配置指南</b></p>
 <pre><code>{
   "rows": [{
     "buttons": [
       {
         "render_data": {
-          "label": "📝再试一次",
+          "label": "一键跳转免艾特",
           "style": 1
         },
         "action": {
           "type": 2,
           "permission": { "type": 2 },
-          "data": "/免艾特申请",
-          "enter": true
+          "data": "/一键跳转免艾特配置 【在这里填入群号】",
+          "enter": false,
+          "reply": false,
+          "unsupport_tips": "请更新QQ版本后使用"
         }
       },
       {
         "render_data": {
-          "label": "🎈玩玩其他的",
+          "label": "免艾特手动配置指南",
           "style": 1
         },
         "action": {
           "type": 2,
           "permission": { "type": 2 },
-          "data": "/help",
-          "enter": true
+          "data": "/免艾特手动配置指南",
+          "enter": true,
+          "reply": false,
+          "unsupport_tips": "请更新QQ版本后使用"
         }
       }
     ]

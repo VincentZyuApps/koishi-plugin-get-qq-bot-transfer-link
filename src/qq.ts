@@ -94,8 +94,10 @@ async function sendViaCrackAdapter(
   session: Session,
   markdownContent: string,
   keyboard?: QQKeyboardContent,
+  quoteMessageId?: string,
 ): Promise<void> {
-  await session.send(buildRawMarkdownElement(markdownContent, keyboard))
+  const markdown = buildRawMarkdownElement(markdownContent, keyboard)
+  await session.send(quoteMessageId ? [h.quote(quoteMessageId), markdown] : markdown)
 }
 
 // ============ 🔧 官方 Adapter 发送 ============
@@ -104,6 +106,7 @@ async function sendViaOfficialAdapter(
   session: Session,
   markdownContent: string,
   keyboard?: QQKeyboardContent,
+  quoteMessageId?: string,
 ): Promise<void> {
   const payload: Record<string, unknown> = {
     msg_type: 2,
@@ -115,6 +118,12 @@ async function sendViaOfficialAdapter(
   if (keyboard?.rows?.length) {
     payload.keyboard = {
       content: keyboard,
+    }
+  }
+
+  if (quoteMessageId) {
+    payload.message_reference = {
+      message_id: quoteMessageId,
     }
   }
 
@@ -135,6 +144,7 @@ export async function sendQQRawMarkdown(
   markdownContent: string,
   keyboard?: QQKeyboardContent,
   config?: Pick<Config, 'verboseConsoleLog'>,
+  quoteMessageId?: string,
 ): Promise<void> {
   if (session.platform !== 'qq') return
 
@@ -146,9 +156,9 @@ export async function sendQQRawMarkdown(
   }
 
   if (isCrack) {
-    await sendViaCrackAdapter(session, markdownContent, keyboard)
+    await sendViaCrackAdapter(session, markdownContent, keyboard, quoteMessageId)
   } else {
-    await sendViaOfficialAdapter(session, markdownContent, keyboard)
+    await sendViaOfficialAdapter(session, markdownContent, keyboard, quoteMessageId)
   }
 }
 
@@ -159,9 +169,10 @@ export async function trySendQQRawMarkdown(
   markdownContent: string,
   keyboard?: QQKeyboardContent,
   config?: Pick<Config, 'verboseConsoleLog'>,
+  quoteMessageId?: string,
 ): Promise<boolean> {
   try {
-    await sendQQRawMarkdown(session, markdownContent, keyboard, config)
+    await sendQQRawMarkdown(session, markdownContent, keyboard, config, quoteMessageId)
     return true
   } catch (error) {
     session.app

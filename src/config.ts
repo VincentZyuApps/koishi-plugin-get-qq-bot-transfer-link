@@ -27,14 +27,6 @@ export interface Config {
   qqMarkdownBotInfoStyle: 'text' | 'bold' | 'inline' | 'table'
 
   // ==== ❌ 缺群号提示配置 ====
-  /** 🖼️ 是否在消息中附带操作提示图片 */
-  showImage: boolean
-  /** 🖼️ 操作提示图片的 URL */
-  imageUrl: string
-  /** 📐 Markdown 图片宽度（含 px 单位） */
-  imageWidth: string
-  /** 📐 Markdown 图片高度（含 px 单位） */
-  imageHeight: string
   /** ❌ 缺群号时的报错提示文本 */
   missingGroupCodeMessage: string
   /** 🧭 QQ 平台缺群号时的发送模式 */
@@ -45,8 +37,24 @@ export interface Config {
   missingGroupCodeKeyboardJson: string
 
   // ==== 🖼️ 图片与说明配置 ====
+  /** 🖼️ 是否在迁移链接消息中附带操作提示图片 */
+  showTransferLinkGuideImage: boolean
+  /** 🖼️ 迁移链接操作提示图片的 URL */
+  transferLinkGuideImageUrl: string
+  /** 📐 迁移链接 Markdown 图片宽度（含 px 单位） */
+  transferLinkGuideImageWidth: string
+  /** 📐 迁移链接 Markdown 图片高度（含 px 单位） */
+  transferLinkGuideImageHeight: string
   /** 📱 版本兼容提示文案 */
   versionHint: string
+  /** 🖼️ 手机 QQ 手动配置指南图片 URL */
+  qqSettingsGuideImageUrl: string
+  /** 📐 手机 QQ 手动配置指南 Markdown 图片宽度 */
+  qqSettingsGuideImageWidth: string
+  /** 📐 手机 QQ 手动配置指南 Markdown 图片高度 */
+  qqSettingsGuideImageHeight: string
+  /** 📝 手机 QQ 手动配置指南说明文字 */
+  qqSettingsGuideText: string
 
   // ==== 🐛 调试配置 ====
   /** 🐛 是否在控制台输出发送 payload */
@@ -172,7 +180,7 @@ export const Config: Schema<Config> = Schema.intersect([
    * 填入 keyboard content 的 JSON（rows 数组），为空则不发按钮，降级为纯文本。
    */
   missingGroupCodeKeyboardJson: Schema.string()
-    .default('{"rows":[{"buttons":[{"render_data":{"label":"📝再试一次","style":1},"action":{"type":2,"permission":{"type":2},"data":"/免艾特申请","enter":true}},{"render_data":{"label":"🎈玩玩其他的","style":1},"action":{"type":2,"permission":{"type":2},"data":"/help","enter":true}}]}]}')
+    .default('{"rows":[{"buttons":[{"render_data":{"label":"一键跳转免艾特","style":1},"action":{"type":2,"permission":{"type":2},"data":"/一键跳转免艾特配置 【在这里填入群号】","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}},{"render_data":{"label":"免艾特手动配置指南","style":1},"action":{"type":2,"permission":{"type":2},"data":"/免艾特手动配置指南","enter":true,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}}]}]}')
     .role('textarea', { rows: [5, 20] })
     .description('🎹 缺群号时 QQ Markdown 消息的 keyboard JSON（填入 rows 数组，为空则不发按钮降级为纯文本）。<br/><i>可以参考 readme 或者上方 WebUI 的 usage 页面获取 JSON 格式示范</i>'),
   }).description('==== ❌ 缺群号提示配置 ===='),
@@ -189,36 +197,55 @@ export const Config: Schema<Config> = Schema.intersect([
     .description('📱 版本兼容提示文案，出现在链接/按钮下方'),
 
   /**
-   * 🖼️ showImage — 操作提示图片开关
+   * 🖼️ showTransferLinkGuideImage — 迁移链接操作提示图片开关
    * - true  → 在链接/按钮上方附带操作提示图片 🖼️
    * - false → 不显示图片
    */
-  showImage: Schema.boolean().default(true)
-    .description('🖼️ 在消息中附带操作提示图片（放在链接/按钮上方）'),
+  showTransferLinkGuideImage: Schema.boolean().default(true)
+    .description('🖼️ 在迁移链接消息中附带操作提示图片（放在链接/按钮上方）'),
 
   /**
-   * 🖼️ imageUrl — 操作提示图片 URL
-   * 当 showImage 为 true 时使用此 URL 显示图片。
+   * 🖼️ transferLinkGuideImageUrl — 迁移链接操作提示图片 URL
+   * 当 showTransferLinkGuideImage 为 true 时使用此 URL 显示图片。
    */
-  imageUrl: Schema.string()
-    .default('https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/操作提示.png')
+  transferLinkGuideImageUrl: Schema.string()
+    .default('https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/tutorial/早期灰度阶段/灰度测试阶段手机QQ点击url弹出的ui的操作提示.png')
     // .role('link')
     .role('textarea', { rows: [2, 5] })
-    .description('🖼️ 操作提示图片的 URL（Markdown 中显示在链接/按钮上方）'),
+    .description('🖼️ 迁移链接操作提示图片的 URL（Markdown 中显示在链接/按钮上方）'),
 
   /**
-   * 📐 imageWidth — Markdown 图片宽度
+   * 📐 transferLinkGuideImageWidth — Markdown 图片宽度
    * QQ Markdown 图片尺寸格式：![#Wpx #Hpx](url)
    */
-  imageWidth: Schema.string().default('1080px')
+  transferLinkGuideImageWidth: Schema.string().default('1080px')
     .description('📐 Markdown 图片宽度（含 px 单位，如 1080px）'),
 
   /**
-   * 📐 imageHeight — Markdown 图片高度
+   * 📐 transferLinkGuideImageHeight — Markdown 图片高度
    * QQ Markdown 图片尺寸格式：![#Wpx #Hpx](url)
    */
-  imageHeight: Schema.string().default('888px')
+  transferLinkGuideImageHeight: Schema.string().default('888px')
     .description('📐 Markdown 图片高度（含 px 单位，如 888px）'),
+
+  /**
+   * 🖼️ qqSettingsGuideImageUrl — 手机 QQ 手动配置指南图片 URL
+   */
+  qqSettingsGuideImageUrl: Schema.string()
+    .default('https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/tutorial/灰度结束阶段/3steps.灰度测试结束后手机QQ的ui的操作提示.png')
+    .role('textarea', { rows: [2, 5] })
+    .description('🖼️ 手机QQ机器人全量消息与主动发言手动配置指南图片 URL'),
+
+  qqSettingsGuideImageWidth: Schema.string().default('1871px')
+    .description('📐 手机QQ手动配置指南的 Markdown 图片宽度（含 px 单位）'),
+
+  qqSettingsGuideImageHeight: Schema.string().default('1044px')
+    .description('📐 手机QQ手动配置指南的 Markdown 图片高度（含 px 单位）'),
+
+  qqSettingsGuideText: Schema.string()
+    .default('请群主按照图片中的步骤，在手机QQ中为群机器人开启“获取群内全部消息”和“机器人主动在群聊内发言”。')
+    .role('textarea', { rows: [2, 5] })
+    .description('📝 手机QQ手动配置指南图片下方的说明文字'),
   }).description('==== 🖼️ 图片与说明配置 ===='),
 
   // ==== 🐛 调试配置 ====

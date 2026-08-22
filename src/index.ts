@@ -1,6 +1,11 @@
 import { Context, h } from 'koishi'
 import { Config } from './config'
-import { buildTransferMarkdown, buildTransferPlainText } from './message'
+import {
+  buildQQSettingsGuideElements,
+  buildQQSettingsGuideMarkdown,
+  buildTransferMarkdown,
+  buildTransferPlainText,
+} from './message'
 import { handleNapcatGetUser } from './onebot'
 import { buildJumpKeyboard, parseKeyboardJson, sendQQRawMarkdown, trySendQQRawMarkdown } from './qq'
 import { buildTransferUrl, resolveBotIdentity } from './transfer'
@@ -96,8 +101,32 @@ export function apply(ctx: Context, config: Config) {
     })
 
   ctx
+    .command('qqbot-guide', '发送手机QQ机器人全量消息与主动发言设置指南')
+    .alias('免艾特手动配置指南')
+    .alias('全量主动手动配置指南')
+    .action(async ({ session }) => {
+      if (!session) return
+
+      if (session.platform === 'qq' && config.useMarkdown) {
+        const markdownContent = buildQQSettingsGuideMarkdown(config)
+        const sent = await trySendQQRawMarkdown(
+          session,
+          markdownContent,
+          undefined,
+          config,
+          session.messageId,
+        )
+        if (sent) return
+      }
+
+      await session.send(buildQQSettingsGuideElements(session.messageId, config))
+    })
+
+  ctx
     .command('qqbot-url [groupCodeArg:string]', '传参是官bot的QQ号')
     .alias('免艾特申请')
+    .alias('一键跳转免艾特配置')
+    .alias('一键跳转全量主动配置')
     .option('botuin', '-u <botuin:string> 官Bot的QQ号')
     .option('botuid', '-i <botuid:string> 官Bot的UID')
     .option('groupcode', '-g <groupcode:string> 群号')
