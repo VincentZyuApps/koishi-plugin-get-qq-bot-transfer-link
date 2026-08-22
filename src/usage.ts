@@ -17,20 +17,27 @@ export const usage = `
 <h2>🔗 相关链接</h2>
 <p>
   <a href="https://www.npmjs.com/package/koishi-plugin-get-qq-bot-transfer-link" target="_blank">
-    <img src="https://img.shields.io/npm/v/koishi-plugin-get-qq-bot-transfer-link?style=flat-square" alt="npm version">
+    <img src="https://img.shields.io/npm/v/koishi-plugin-get-qq-bot-transfer-link?style=flat-square&logo=npm" alt="npm version">
   </a>
+  <a href="https://npm-stat.com/charts.html?package=koishi-plugin-get-qq-bot-transfer-link" target="_blank">
+    <img src="https://img.shields.io/npm/dm/koishi-plugin-get-qq-bot-transfer-link?style=flat-square&logo=npm" alt="npm downloads">
+  </a>
+  <br>
   <a href="https://github.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
   </a>
   <a href="https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link" target="_blank">
     <img src="https://img.shields.io/badge/Gitee-C71D23?style=for-the-badge&logo=gitee&logoColor=white" alt="Gitee">
   </a>
-  <a href="https://qm.qq.com/q/ZN7fxZ3qCq" target="_blank">
-    <img src="https://img.shields.io/badge/QQ群-1085190201-1AAD19?style=flat-square" alt="QQ群">
-  </a>
+  <br>
   <a href="https://forum.koishi.xyz/t/topic/12558" target="_blank">
     <img src="https://img.shields.io/badge/Koishi%20Forum-12558-5546A3?style=for-the-badge&logo=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Ff%2Ff3%2FKoishi.js_Logo.png&logoColor=white" alt="Forum">
   </a>
+  <br>
+  <a href="https://qm.qq.com/q/4vjto4V7Di" target="_blank">
+    <img src="https://img.shields.io/badge/QQ群-1085190201-12B7F5?style=flat-square&logo=qq&logoColor=white" alt="QQ群">
+  </a>
+  <br>
 </p>
 
 <hr>
@@ -38,7 +45,7 @@ export const usage = `
 <h2>💬 交流反馈</h2>
 <p>🐛 Bug 反馈 / 💡 建议 / 👨‍💻 插件开发交流，欢迎加群：</p>
 <p><del>💬 插件使用问题 / 🐛 Bug反馈 / 👨‍💻 插件开发交流，欢迎加入QQ群：<b>259248174</b>   🎉（这个群G了</del></p>
-<p>💬 插件使用问题 / 🐛 Bug反馈 / 👨‍💻 插件开发交流，欢迎加入QQ群：<b>259248174🎉</p>
+<p>💬 插件使用问题 / 🐛 Bug反馈 / 👨‍💻 插件开发交流，欢迎加入QQ群：<b>1085190201</b> 🎉</p>
 <p>💡 在群里直接艾特我，回复的更快哦~ ✨</p>
 
 <hr>
