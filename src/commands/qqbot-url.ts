@@ -119,7 +119,7 @@ export function registerQQBotUrlCommand(ctx: Context, config: Config) {
               jumpEnter: false,
             })
             : undefined
-          const markdownContent = buildTransferMarkdown(identity, url, config, !!keyboard)
+          const markdownContent = buildTransferMarkdown(identity, url, config)
           const sent = await trySendQQRawMarkdown(session, markdownContent, keyboard, config)
 
           if (sent) return

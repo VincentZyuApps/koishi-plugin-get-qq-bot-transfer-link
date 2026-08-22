@@ -25,7 +25,6 @@ export function buildTransferMarkdown(
   identity: BotIdentity,
   url: string,
   config: Config,
-  hasJumpButton = config.addJumpButton,
 ): string {
   const { botUin, botUid, groupCode } = identity
   const blocks = ['## 🔗 官Bot全量主动配置链接']
@@ -42,12 +41,10 @@ export function buildTransferMarkdown(
     blocks.push(`![ #${config.qqTransferLinkGuideImageWidth} #${config.qqTransferLinkGuideImageHeight}](${config.qqTransferLinkGuideImageUrl})`)
   }
 
-  if (hasJumpButton) {
-    if (!blocks.length) blocks.push('点击下方按钮打开配置链接。')
-    return blocks.join('\n\n')
+  if (config.qqTransferLinkGuideShowUrl) {
+    blocks.push(`🔗 官Bot全量主动配置链接：\n${url}`)
   }
 
-  blocks.push(`🔗 官Bot全量主动配置链接：\n${url}`)
   return blocks.join('\n\n')
 }
 
@@ -71,7 +68,10 @@ export function buildTransferPlainText(
     blocks.push(`${h.image(config.qqTransferLinkGuideImageUrl)}`)
   }
 
-  blocks.push(`官Bot全量主动配置链接：\n${url}`)
+  if (config.qqTransferLinkGuideShowUrl) {
+    blocks.push(`🔗 官Bot全量主动配置链接：\n${url}`)
+  }
+
   return blocks.join('\n\n')
 }
 

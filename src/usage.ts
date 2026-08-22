@@ -117,6 +117,7 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
   <tr><td><code>qqTransferLinkGuideImageUrl</code></td><td>string</td><td>Gitee Raw 直链</td><td>迁移链接操作提示图片 URL</td></tr>
   <tr><td><code>qqTransferLinkGuideImageWidth</code></td><td>string</td><td><code>1080px</code></td><td>迁移链接 Markdown 图片宽度</td></tr>
   <tr><td><code>qqTransferLinkGuideImageHeight</code></td><td>string</td><td><code>888px</code></td><td>迁移链接 Markdown 图片高度</td></tr>
+  <tr><td><code>qqTransferLinkGuideShowUrl</code></td><td>boolean</td><td><code>true</code></td><td>在 QQ Markdown、QQ 纯文本和非 QQ 平台消息末尾附带迁移 URL</td></tr>
   <tr><td><code>qqUiSettingsGuideText</code></td><td>string</td><td>见配置页</td><td>手机QQ手动配置指南说明文字</td></tr>
   <tr><td><code>qqUiSettingsGuideShowImage</code></td><td>boolean</td><td><code>true</code></td><td>手动配置指南附带图片</td></tr>
   <tr><td><code>qqUiSettingsGuideImageUrl</code></td><td>string</td><td>Gitee Raw 直链</td><td>手机QQ手动配置指南图片 URL</td></tr>

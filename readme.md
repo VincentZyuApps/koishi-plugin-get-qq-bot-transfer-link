@@ -57,6 +57,7 @@
 | `qqTransferLinkGuideImageUrl` | string | Gitee Raw 直链 | 迁移链接操作提示图片 URL |
 | `qqTransferLinkGuideImageWidth` | string | `1080px` | 迁移链接 Markdown 图片宽度 |
 | `qqTransferLinkGuideImageHeight` | string | `888px` | 迁移链接 Markdown 图片高度 |
+| `qqTransferLinkGuideShowUrl` | boolean | `true` | 在 QQ Markdown、QQ 纯文本和非 QQ 平台消息末尾附带迁移 URL |
 | `qqUiSettingsGuideText` | string | 见配置页 | 手机QQ手动配置指南说明文字 |
 | `qqUiSettingsGuideShowImage` | boolean | `true` | 手动配置指南附带图片 |
 | `qqUiSettingsGuideImageUrl` | string | Gitee Raw 直链 | 手机QQ手动配置指南图片 URL |
