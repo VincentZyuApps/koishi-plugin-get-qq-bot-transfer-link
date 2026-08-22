@@ -1,7 +1,7 @@
 import { h, Session } from 'koishi'
 
 // ============ 👤 NapCat 用户查询 ============
-/** 通过 NapCat OneBot API 查询用户信息（仅 onebot 平台可用） */
+/** 通过 NapCat OneBot API 查询用户信息（仅 onebot 平台可用）（其他的onebot实现不知道捏，我只测试过onebot捏） */
 export async function handleNapcatGetUser(
   session: Session | undefined,
   userId: string | undefined,

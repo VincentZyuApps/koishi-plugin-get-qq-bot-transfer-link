@@ -2,7 +2,7 @@
 
 # koishi-plugin-get-qq-bot-transfer-link
 
-利用NapCat获取官bot的uid，然后获取本群的 开放官bot的全量和主动的配置链接，然后群主用手机qq打开就可以配置了
+利用 [NapCat](https://github.com/NapNeko/NapCatQQ) 获取官bot的uid，然后获取本群的 开放官bot的全量和主动的配置链接，然后群主用手机qq打开就可以配置了
 
 [![npm](https://img.shields.io/npm/v/koishi-plugin-get-qq-bot-transfer-link?style=flat-square&logo=npm)](https://www.npmjs.com/package/koishi-plugin-get-qq-bot-transfer-link)
 [![npm-download](https://img.shields.io/npm/dm/koishi-plugin-get-qq-bot-transfer-link?style=flat-square&logo=npm)](https://npm-stat.com/charts.html?package=koishi-plugin-get-qq-bot-transfer-link)
@@ -44,32 +44,34 @@
 | 配置项 | 类型 | 默认值 | 说明 |
 |---|---|---|---|
 | `useMarkdown` | boolean | `true` | QQ平台使用 Markdown 富文本发送 |
-| `addJumpButton` | boolean | `true` | 消息底部添加「打开配置链接」跳转按钮 |
+| `addJumpButton` | boolean | `true` | 两个 `qqbot-*` 指令底部添加共享键盘 |
+| `qqBotCommandKeyboardJson` | string | 见配置页 | 两个 `qqbot-*` 指令共用的键盘 JSON 模板 |
 | `defaultBotUin` | string | `""` | 默认官Bot QQ号（option 兜底） |
 | `defaultBotUid` | string | `""` | 默认官Bot UID（option 兜底） |
 | `defaultGroupCode` | string | `""` | 默认群号（option 兜底，再兜底到当前群） |
 | `requireGroupCode` | boolean | `true` | 强制要求通过 arg 或 `--groupcode` 传入群号 |
-| `showBotInfo` | boolean | `false` | 消息中显示 botUin / botUid / groupCode |
+| `showBotInfo` | boolean | `true` | 两个 `qqbot-*` 指令中显示 botUin / botUid / groupCode |
 | `qqMarkdownBotInfoStyle` | `text`/`bold`/`inline`/`table` | `bold` | Bot 信息在 Markdown 中的展示样式 |
-| `showTransferLinkGuideImage` | boolean | `true` | 迁移链接上方附带操作提示图片 |
-| `transferLinkGuideImageUrl` | string | gitee raw 直链 | 迁移链接操作提示图片 URL |
-| `transferLinkGuideImageWidth` | string | `1080px` | 迁移链接 Markdown 图片宽度 |
-| `transferLinkGuideImageHeight` | string | `888px` | 迁移链接 Markdown 图片高度 |
-| `qqSettingsGuideImageUrl` | string | gitee raw 直链 | 手机QQ手动配置指南图片 URL |
-| `qqSettingsGuideImageWidth` | string | `1871px` | 手动配置指南 Markdown 图片宽度 |
-| `qqSettingsGuideImageHeight` | string | `1044px` | 手动配置指南 Markdown 图片高度 |
-| `qqSettingsGuideText` | string | 见配置页 | 手动配置指南图片下方的说明文字 |
+| `qqTransferLinkGuideText` | string | 见配置页 | 迁移链接说明文字 |
+| `qqTransferLinkGuideShowImage` | boolean | `true` | 迁移链接消息附带操作提示图片 |
+| `qqTransferLinkGuideImageUrl` | string | jsDelivr 直链 | 迁移链接操作提示图片 URL |
+| `qqTransferLinkGuideImageWidth` | string | `1080px` | 迁移链接 Markdown 图片宽度 |
+| `qqTransferLinkGuideImageHeight` | string | `888px` | 迁移链接 Markdown 图片高度 |
+| `qqUiSettingsGuideText` | string | 见配置页 | 手机QQ手动配置指南说明文字 |
+| `qqUiSettingsGuideShowImage` | boolean | `true` | 手动配置指南附带图片 |
+| `qqUiSettingsGuideImageUrl` | string | jsDelivr 直链 | 手机QQ手动配置指南图片 URL |
+| `qqUiSettingsGuideImageWidth` | string | `1871px` | 手动配置指南 Markdown 图片宽度 |
+| `qqUiSettingsGuideImageHeight` | string | `1044px` | 手动配置指南 Markdown 图片高度 |
 | `missingGroupCodeSendMode` | `text`/`markdown`/`markdown_button` | `markdown` | 缺群号时 QQ 平台的发送模式 |
 | `missingGroupCodeMessage` | string | 见配置页 | 缺群号时的纯文本提示 |
 | `missingGroupCodeMarkdownContent` | string | 见配置页 | 缺群号时的 Markdown 内容 |
 | `missingGroupCodeKeyboardJson` | string | 见配置页 | 缺群号时的自定义按钮 JSON |
-| `versionHint` | string | `安卓和iOS QQ 9.2.90及以上版本可用` | 版本兼容提示文案 |
 | `verboseConsoleLog` | boolean | `false` | 控制台输出每次发送的 payload（调试用） |
 
 ## ⌨️ 指令
 
 ### `napcat-getuser [userId]`
-通过 napcat onebot 接口查询用户信息。仅在 `onebot` 平台可用。
+通过 [napcat onebot](https://github.com/NapNeko/NapCatQQ) 接口查询用户信息。仅在 `onebot` 平台可用。
 
 ### `qqbot-url`
 生成官Bot全量主动配置链接。
@@ -90,32 +92,58 @@
 
 **别名：** `免艾特手动配置指南`、`全量主动手动配置指南`
 
-QQ 平台开启 `useMarkdown` 时发送内嵌图片的 Markdown；关闭后以及非 QQ 平台发送通用的引用、图片和文字消息段。
+QQ 平台开启 `useMarkdown` 或 `addJumpButton` 时发送 Markdown，顺序为 Bot 信息、引用说明、可选图片、共享键盘。Guide 不接收身份参数，Bot 信息读取默认配置，群号可继续回退到当前会话，缺失字段显示 `-`。
 
-## 🎹 缺群号按钮 JSON 示例
+## 🎹 两个 qqbot 指令共用的键盘模板
 
-### 示例1 - 快速填充指令
-```json
-{"rows":[{"buttons":[{"id":"cmd_1","render_data":{"label":"🔢重新输入群号(点我快速填入指令)","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}}]}]}
-```
+`qqBotCommandKeyboardJson` 的默认值由 TypeScript 原生对象生成，支持 `${url}`、`${jumpActionType}`、`${jumpActionData}`、`${jumpEnter}` 占位符。
 
-### 示例2 - 跳转网页链接
-```json
-{"rows":[{"buttons":[{"id":"help_1","render_data":{"label":"❓查看帮助(url编码规则)","style":1},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}
-```
+- `qqbot-url`：第一行按钮直接打开本次生成的迁移链接。
+- `qqbot-guide`：第一行按钮填入 `/一键跳转免艾特配置 【在这里填入群号】`，等待用户修改群号；第二行执行 `/qqbot-guide`。
+- 模板留空或 JSON 无效时不发送键盘；`qqbot-url` 会回退为在 Markdown 正文中显示链接。
 
-### 示例3 - 两按钮一起
-```json
-{"rows":[{"buttons":[{"id":"cmd_2","render_data":{"label":"🔢重新输入群号","style":1},"action":{"type":2,"permission":{"type":2},"data":"qqbot-url -g ","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}},{"id":"help_2","render_data":{"label":"❓查看帮助","style":0},"action":{"type":0,"permission":{"type":2},"data":"https://forum.koishi.xyz/t/topic/12558","unsupport_tips":"请更新QQ版本后使用"}}]}]}
-```
+## 🎹 按钮 JSON 填写示范
 
-### 示例4 - 一键跳转与手动配置指南
-```json
-{"rows":[{"buttons":[{"render_data":{"label":"一键跳转免艾特","style":1},"action":{"type":2,"permission":{"type":2},"data":"/一键跳转免艾特配置 【在这里填入群号】","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}},{"render_data":{"label":"免艾特手动配置指南","style":1},"action":{"type":2,"permission":{"type":2},"data":"/免艾特手动配置指南","enter":true,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}}]}]}
-```
+- [`missingGroupCodeKeyboardJson`：缺群号按钮配置](https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/missing-group-code-keyboard.md)
+- [`qqBotCommandKeyboardJson`：两个 qqbot 指令共用按钮配置](https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/qqbot-command-keyboard.md)
 
 ## ✨ 效果
-![1.png](doc/images/preview/1.png)
-![2.png](doc/images/preview/2.png)
-![3.png](doc/images/preview/3.png)
-![4.png](doc/images/preview/4.png)
+
+### 1️⃣ napcat-getuser
+> ↓ 下方图片: 使用 `napcat-getuser <官Bot QQ号>` 查询官Bot信息，并从返回 JSON 中取得 `uid` 与 `uin`。
+
+![0.napcat-getuser.png](doc/images/preview/0.napcat-getuser.png)
+
+### 2️⃣ qqbot-url
+> ↓ 下方图片: 手机QQ打开迁移链接后，在授权页面开启“获取群内全部消息”和“机器人主动在群聊内发言”，然后点击“同意授权”。
+
+<div style="display: inline-block; border: 3px solid #12B7F5; border-radius: 8px; padding: 8px;">
+  <img src="doc/images/qqbot-url-transfer-link.png" alt="qqbot-url 迁移链接操作提示" style="display: block; max-width: 100%; border-radius: 4px;">
+</div>
+
+> ↓ 下方图片: `qqbot-url` 的帮助、缺少群号提示、传入群号后的链接消息，以及 Markdown 按钮发送效果。
+
+![1.qqbot-url.png](doc/images/preview/1.qqbot-url.png)
+
+> ↓ 下方图片: 手机QQ弹出的机器人群聊权限授权窗口，确认开启两个权限后点击“同意授权”。
+
+![2.qqbot-url.png](doc/images/preview/2.qqbot-url.png)
+
+> ↓ 下方图片: 手机QQ权限页中“获取群内全部消息”和“机器人主动在群聊内发言”的具体设置位置。
+
+![3.qqbot-url.png](doc/images/preview/3.qqbot-url.png)
+
+> ↓ 下方图片: 权限开启后，机器人可以接收未被艾特的群消息的实际效果。
+
+![4.qqbot-url.png](doc/images/preview/4.qqbot-url.png)
+
+### 3️⃣ qqbot-guide
+> ↓ 下方图片: 群主在手机QQ群成员列表中找到机器人、进入资料页设置，并开启全量消息与主动发言的三步操作图。
+
+<div style="display: inline-block; border: 3px solid #12B7F5; border-radius: 8px; padding: 8px;">
+  <img src="doc/images/qqbot-guide-ui-settings.png" alt="qqbot-guide 手机QQ UI 手动配置指南" style="display: block; max-width: 100%; border-radius: 4px;">
+</div>
+
+> ↓ 下方图片: `qqbot-guide` 在 QQ 中发送的手动配置指南，包含 Bot 信息、内嵌步骤图和底部快捷按钮。
+
+![5.qqbot-guide.png](doc/images/preview/5.qqbot-guide.png)

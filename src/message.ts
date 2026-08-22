@@ -25,20 +25,30 @@ export function buildTransferMarkdown(
   identity: BotIdentity,
   url: string,
   config: Config,
+  hasJumpButton = config.addJumpButton,
 ): string {
   const { botUin, botUid, groupCode } = identity
-  const imageBlock = config.showTransferLinkGuideImage
-    ? `![ #${config.transferLinkGuideImageWidth} #${config.transferLinkGuideImageHeight}](${config.transferLinkGuideImageUrl})\n\n`
-    : ''
-  const infoBlock = config.showBotInfo
-    ? `${buildInfoTable(botUin, botUid, groupCode, config.qqMarkdownBotInfoStyle)}\n\n`
-    : ''
+  const blocks = ['## 🔗 官Bot全量主动配置链接']
 
-  if (config.addJumpButton) {
-    return `## 🔗 官Bot全量主动配置链接\n\n${infoBlock}点击下方按钮打开配置页面。\n\n> ${config.versionHint}\n\n${imageBlock}`
+  if (config.showBotInfo) {
+    blocks.push(buildInfoTable(botUin, botUid, groupCode, config.qqMarkdownBotInfoStyle))
   }
 
-  return `${infoBlock}官Bot全量主动配置链接（${config.versionHint}）：\n${imageBlock}${url}`
+  if (config.qqTransferLinkGuideText) {
+    blocks.push(`> ${config.qqTransferLinkGuideText}`)
+  }
+
+  if (config.qqTransferLinkGuideShowImage) {
+    blocks.push(`![ #${config.qqTransferLinkGuideImageWidth} #${config.qqTransferLinkGuideImageHeight}](${config.qqTransferLinkGuideImageUrl})`)
+  }
+
+  if (hasJumpButton) {
+    if (!blocks.length) blocks.push('点击下方按钮打开配置链接。')
+    return blocks.join('\n\n')
+  }
+
+  blocks.push(`🔗 官Bot全量主动配置链接：\n${url}`)
+  return blocks.join('\n\n')
 }
 
 export function buildTransferPlainText(
@@ -47,28 +57,57 @@ export function buildTransferPlainText(
   config: Config,
 ): string {
   const { botUin, botUid, groupCode } = identity
-  const imageBlock = config.showTransferLinkGuideImage
-    ? `${h.image(config.transferLinkGuideImageUrl)}\n`
-    : ''
-  const infoBlock = config.showBotInfo
-    ? `🆔 botUin：${botUin}\n🔑 botUid：${botUid}\n👥 groupCode：${groupCode}\n\n`
-    : ''
+  const blocks = []
 
-  return `${infoBlock}官Bot全量主动配置链接（${config.versionHint}）：\n${imageBlock}${url}`
+  if (config.showBotInfo) {
+    blocks.push(`🆔 botUin：${botUin}\n🔑 botUid：${botUid}\n👥 groupCode：${groupCode}`)
+  }
+
+  if (config.qqTransferLinkGuideText) {
+    blocks.push(config.qqTransferLinkGuideText)
+  }
+
+  if (config.qqTransferLinkGuideShowImage) {
+    blocks.push(`${h.image(config.qqTransferLinkGuideImageUrl)}`)
+  }
+
+  blocks.push(`官Bot全量主动配置链接：\n${url}`)
+  return blocks.join('\n\n')
 }
 
-export function buildQQSettingsGuideMarkdown(config: Config): string {
-  const image = `![ #${config.qqSettingsGuideImageWidth} #${config.qqSettingsGuideImageHeight}](${config.qqSettingsGuideImageUrl})`
-  return config.qqSettingsGuideText ? `${image}\n\n${config.qqSettingsGuideText}` : image
+export function buildQQUiSettingsGuideMarkdown(
+  identity: BotIdentity,
+  config: Config,
+): string {
+  const blocks = ['## 📖 官Bot全量手动UI配置指南']
+
+  if (config.showBotInfo) {
+    blocks.push(buildInfoTable(identity.botUin, identity.botUid, identity.groupCode, config.qqMarkdownBotInfoStyle))
+  }
+
+  if (config.qqUiSettingsGuideText) {
+    blocks.push(`> ${config.qqUiSettingsGuideText}`)
+  }
+
+  if (config.qqUiSettingsGuideShowImage) {
+    blocks.push(`![ #${config.qqUiSettingsGuideImageWidth} #${config.qqUiSettingsGuideImageHeight}](${config.qqUiSettingsGuideImageUrl})`)
+  }
+
+  if (!blocks.length) blocks.push('手机 QQ 机器人手动配置指南')
+  return blocks.join('\n\n')
 }
 
-export function buildQQSettingsGuideElements(
+export function buildQQUiSettingsGuideElements(
   messageId: string | undefined,
+  identity: BotIdentity,
   config: Config,
 ) {
   const elements = []
   if (messageId) elements.push(h.quote(messageId))
-  elements.push(h.image(config.qqSettingsGuideImageUrl))
-  if (config.qqSettingsGuideText) elements.push(config.qqSettingsGuideText)
+  if (config.showBotInfo) {
+    elements.push(`🆔 botUin：${identity.botUin}\n🔑 botUid：${identity.botUid}\n👥 groupCode：${identity.groupCode}\n\n`)
+  }
+  if (config.qqUiSettingsGuideText) elements.push(`${config.qqUiSettingsGuideText}\n\n`)
+  if (config.qqUiSettingsGuideShowImage) elements.push(h.image(config.qqUiSettingsGuideImageUrl))
   return elements
 }

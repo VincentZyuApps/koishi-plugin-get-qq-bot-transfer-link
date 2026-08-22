@@ -1,4 +1,9 @@
 import { Schema } from 'koishi'
+import {
+  DEFAULT_MISSING_GROUP_CODE_KEYBOARD,
+  DEFAULT_QQ_BOT_COMMAND_KEYBOARD,
+  stringifyCompact,
+} from './qq'
 
 /**
  * 📋 插件配置项接口
@@ -9,6 +14,8 @@ export interface Config {
   useMarkdown: boolean
   /** 🔗 是否在消息末尾添加一个跳转链接按钮 */
   addJumpButton: boolean
+  /** 🎹 两个 qqbot 指令共用的 QQ Markdown keyboard JSON */
+  qqBotCommandKeyboardJson: string
 
   // ==== 🧩 默认参数配置 ====
   /** 🆔 官Bot 的默认 botUin（QQ号），作为参数兜底值 */
@@ -36,25 +43,29 @@ export interface Config {
   /** 🎹 缺群号时 QQ Markdown 消息的 keyboard JSON（为空则不发按钮） */
   missingGroupCodeKeyboardJson: string
 
-  // ==== 🖼️ 图片与说明配置 ====
+  // ==== 🔗 手机 QQ 转换链接的图片与说明配置 ====
+  /** 📝 迁移链接提示文案 */
+  qqTransferLinkGuideText: string
   /** 🖼️ 是否在迁移链接消息中附带操作提示图片 */
-  showTransferLinkGuideImage: boolean
+  qqTransferLinkGuideShowImage: boolean
   /** 🖼️ 迁移链接操作提示图片的 URL */
-  transferLinkGuideImageUrl: string
+  qqTransferLinkGuideImageUrl: string
   /** 📐 迁移链接 Markdown 图片宽度（含 px 单位） */
-  transferLinkGuideImageWidth: string
+  qqTransferLinkGuideImageWidth: string
   /** 📐 迁移链接 Markdown 图片高度（含 px 单位） */
-  transferLinkGuideImageHeight: string
-  /** 📱 版本兼容提示文案 */
-  versionHint: string
-  /** 🖼️ 手机 QQ 手动配置指南图片 URL */
-  qqSettingsGuideImageUrl: string
-  /** 📐 手机 QQ 手动配置指南 Markdown 图片宽度 */
-  qqSettingsGuideImageWidth: string
-  /** 📐 手机 QQ 手动配置指南 Markdown 图片高度 */
-  qqSettingsGuideImageHeight: string
+  qqTransferLinkGuideImageHeight: string
+
+  // ==== 📱 手机 QQ UI 手动配置的图片与说明配置 ====
   /** 📝 手机 QQ 手动配置指南说明文字 */
-  qqSettingsGuideText: string
+  qqUiSettingsGuideText: string
+  /** 🖼️ 是否显示手机 QQ 手动配置指南图片 */
+  qqUiSettingsGuideShowImage: boolean
+  /** 🖼️ 手机 QQ 手动配置指南图片 URL */
+  qqUiSettingsGuideImageUrl: string
+  /** 📐 手机 QQ 手动配置指南 Markdown 图片宽度 */
+  qqUiSettingsGuideImageWidth: string
+  /** 📐 手机 QQ 手动配置指南 Markdown 图片高度 */
+  qqUiSettingsGuideImageHeight: string
 
   // ==== 🐛 调试配置 ====
   /** 🐛 是否在控制台输出发送 payload */
@@ -62,27 +73,6 @@ export interface Config {
 }
 
 export const Config: Schema<Config> = Schema.intersect([
-  // ==== 📝 基础发送配置 ====
-  Schema.object({
-  /**
-   * 📝 useMarkdown — Markdown 开关
-   * - true  → 发送 Markdown 富文本消息（支持链接高亮、排版更美观）✨
-   * - false → 发送纯文本消息（最简兼容模式）📄
-   * 💡 非 QQ 官方平台时自动降级为纯文本，不受此配置影响。
-   */
-  useMarkdown: Schema.boolean().default(true)
-    .description('📝 在QQ官方平台使用Markdown按钮格式发送配置链接（而非贼长的纯文本链接）✨'),
-
-  /**
-   * 🔗 addJumpButton — 跳转按钮开关
-   * - true  → 消息底部挂载一个「🌐 打开配置链接」按钮，点击一键跳转 🚀
-   * - false → 不添加按钮，仅展示文字链接 📄
-   * 💡 开启后自动启用 Markdown 模式（按钮依赖 msg_type: 2）。
-   */
-  addJumpButton: Schema.boolean().default(true)
-    .description('🔗 在QQ官方Bot平台的消息末尾添加一个跳转链接按钮，点击直接打开配置页 🚀'),
-  }).description('==== 📝 基础发送配置 ===='),
-
   // ==== 🧩 默认参数配置 ====
   Schema.object({
   /**
@@ -99,7 +89,7 @@ export const Config: Schema<Config> = Schema.intersect([
    * 留空且未传参时会报错 ⚠️
    */
   defaultBotUid: Schema.string().default('')
-    .description('🔑 默认官Bot的UID（botUid），未传 --botuid 时兜底使用 <br/>  <i> <b>建议实践</b>: 用Napcat获取一次官bot的uid，然后就填写在这里，一劳永逸  </i>'),
+    .description('🔑 默认官Bot的UID（botUid），未传 --botuid 时兜底使用 <br/>  <i> <b>建议实践</b>: 用<a href="https://github.com/NapNeko/NapCatQQ" target="_blank">Napcat</a>获取一次官bot的uid，然后就填写在这里，一劳永逸  </i>'),
 
   /**
    * 👥 defaultGroupCode — 默认群号
@@ -180,73 +170,86 @@ export const Config: Schema<Config> = Schema.intersect([
    * 填入 keyboard content 的 JSON（rows 数组），为空则不发按钮，降级为纯文本。
    */
   missingGroupCodeKeyboardJson: Schema.string()
-    .default('{"rows":[{"buttons":[{"render_data":{"label":"一键跳转免艾特","style":1},"action":{"type":2,"permission":{"type":2},"data":"/一键跳转免艾特配置 【在这里填入群号】","enter":false,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}},{"render_data":{"label":"免艾特手动配置指南","style":1},"action":{"type":2,"permission":{"type":2},"data":"/免艾特手动配置指南","enter":true,"reply":false,"unsupport_tips":"请更新QQ版本后使用"}}]}]}')
+    .default(stringifyCompact(DEFAULT_MISSING_GROUP_CODE_KEYBOARD))
     .role('textarea', { rows: [5, 20] })
-    .description('🎹 缺群号时 QQ Markdown 消息的 keyboard JSON（填入 rows 数组，为空则不发按钮降级为纯文本）。<br/><i>可以参考 readme 或者上方 WebUI 的 usage 页面获取 JSON 格式示范</i>'),
+    .description('🎹 缺群号时 QQ Markdown 消息的 keyboard JSON（填入 rows 数组，为空则不发按钮降级为纯文本）。<br/><i><a href="https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/missing-group-code-keyboard.md" target="_blank">查看 Gitee 填写示范</a></i>'),
   }).description('==== ❌ 缺群号提示配置 ===='),
 
-  // ==== 🖼️ 图片与说明配置 ====
+  // ==== 📝 基础发送配置 ====
   Schema.object({
   /**
-   * 📱 versionHint — 版本兼容提示文案
-   * 出现在链接/按钮下方的版本兼容说明文字。
+   * 📝 useMarkdown — Markdown 开关
+   * - true  → 发送 Markdown 富文本消息（支持链接高亮、排版更美观）✨
+   * - false → 发送纯文本消息（最简兼容模式）📄
+   * 💡 非 QQ 官方平台时自动降级为纯文本，不受此配置影响。
    */
-  versionHint: Schema.string()
-    .default('安卓和iOS QQ 9.2.90及以上版本可用。iOS也可以直接去设置里配置。')
+  useMarkdown: Schema.boolean().default(true)
+    .description('📝 在QQ官方平台使用Markdown按钮格式发送配置链接（而非贼长的纯文本链接）✨'),
+
+  /**
+   * 🔗 addJumpButton — 跳转按钮开关
+   * - true  → 两个 qqbot 指令的消息底部挂载共享键盘 🚀
+   * - false → 不添加按钮，仅展示消息内容 📄
+   * 💡 开启后自动启用 Markdown 模式（按钮依赖 msg_type: 2）。
+   */
+  addJumpButton: Schema.boolean().default(true)
+    .description('🔗 在两个 qqbot 指令的 QQ Markdown 消息末尾添加共享的两行按钮 🚀'),
+
+  /** 两个 qqbot 指令共用的 QQ Markdown keyboard JSON 模板。 */
+  qqBotCommandKeyboardJson: Schema.string()
+    .default(stringifyCompact(DEFAULT_QQ_BOT_COMMAND_KEYBOARD))
+    .role('textarea', { rows: [8, 20] })
+    .description('🎹 qqbot-url 与 qqbot-guide 共用的 keyboard JSON。<br/><i>支持变量：<code>${url}</code>、<code>${jumpActionType}</code>、<code>${jumpActionData}</code>、<code>${jumpEnter}</code>；<a href="https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/qqbot-command-keyboard.md" target="_blank">查看 Gitee 填写示范</a></i>'),
+  }).description('==== 📝 基础发送配置 ===='),
+
+  // ==== 🔗 手机 QQ 转换链接的图片与说明配置 ====
+  Schema.object({
+  /** 出现在链接或按钮上方的迁移链接说明文字。 */
+  qqTransferLinkGuideText: Schema.string()
+    .default('这个链接只有群主才能进行设置。手机QQ 9.2.90及以上版本可用。最新版本手机QQ也可以直接去手机qq的ui中设置。可以使用指令 /免艾特手动配置指南 获取帮助')
     .role('textarea', { rows: [2, 5] })
-    .description('📱 版本兼容提示文案，出现在链接/按钮下方'),
+    .description('📱 迁移链接引导文案，显示在图片和链接或按钮上方'),
+
+  qqTransferLinkGuideShowImage: Schema.boolean().default(true)
+    .description('🖼️ 在迁移链接消息中附带操作提示图片'),
 
   /**
-   * 🖼️ showTransferLinkGuideImage — 迁移链接操作提示图片开关
-   * - true  → 在链接/按钮上方附带操作提示图片 🖼️
-   * - false → 不显示图片
+   * 🖼️ qqTransferLinkGuideImageUrl — 迁移链接操作提示图片 URL
+   * 当 qqTransferLinkGuideShowImage 为 true 时使用此 URL 显示图片。
    */
-  showTransferLinkGuideImage: Schema.boolean().default(true)
-    .description('🖼️ 在迁移链接消息中附带操作提示图片（放在链接/按钮上方）'),
-
-  /**
-   * 🖼️ transferLinkGuideImageUrl — 迁移链接操作提示图片 URL
-   * 当 showTransferLinkGuideImage 为 true 时使用此 URL 显示图片。
-   */
-  transferLinkGuideImageUrl: Schema.string()
-    .default('https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/tutorial/早期灰度阶段/灰度测试阶段手机QQ点击url弹出的ui的操作提示.png')
-    // .role('link')
+  qqTransferLinkGuideImageUrl: Schema.string()
+    .default('https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/qqbot-url-transfer-link.png')
     .role('textarea', { rows: [2, 5] })
     .description('🖼️ 迁移链接操作提示图片的 URL（Markdown 中显示在链接/按钮上方）'),
 
-  /**
-   * 📐 transferLinkGuideImageWidth — Markdown 图片宽度
-   * QQ Markdown 图片尺寸格式：![#Wpx #Hpx](url)
-   */
-  transferLinkGuideImageWidth: Schema.string().default('1080px')
+  qqTransferLinkGuideImageWidth: Schema.string().default('1080px')
     .description('📐 Markdown 图片宽度（含 px 单位，如 1080px）'),
 
-  /**
-   * 📐 transferLinkGuideImageHeight — Markdown 图片高度
-   * QQ Markdown 图片尺寸格式：![#Wpx #Hpx](url)
-   */
-  transferLinkGuideImageHeight: Schema.string().default('888px')
+  qqTransferLinkGuideImageHeight: Schema.string().default('888px')
     .description('📐 Markdown 图片高度（含 px 单位，如 888px）'),
+  }).description('==== 🔗 手机 QQ 转换链接的图片与说明配置 ===='),
 
-  /**
-   * 🖼️ qqSettingsGuideImageUrl — 手机 QQ 手动配置指南图片 URL
-   */
-  qqSettingsGuideImageUrl: Schema.string()
-    .default('https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/tutorial/灰度结束阶段/3steps.灰度测试结束后手机QQ的ui的操作提示.png')
+  // ==== 📱 手机 QQ UI 手动配置的图片与说明配置 ====
+  Schema.object({
+  qqUiSettingsGuideText: Schema.string()
+    .default('一个QQ群的官bot全量主动只有群主能设置。请群主按照图片中的步骤，在手机QQ中为群机器人开启“获取群内全部消息”和“机器人主动在群聊内发言”。')
+    .role('textarea', { rows: [2, 5] })
+    .description('📝 手机QQ手动配置指南说明文字'),
+
+  qqUiSettingsGuideShowImage: Schema.boolean().default(true)
+    .description('🖼️ 在手机QQ手动配置指南消息中附带操作图片'),
+
+  qqUiSettingsGuideImageUrl: Schema.string()
+    .default('https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/qqbot-guide-ui-settings.png')
     .role('textarea', { rows: [2, 5] })
     .description('🖼️ 手机QQ机器人全量消息与主动发言手动配置指南图片 URL'),
 
-  qqSettingsGuideImageWidth: Schema.string().default('1871px')
+  qqUiSettingsGuideImageWidth: Schema.string().default('1871px')
     .description('📐 手机QQ手动配置指南的 Markdown 图片宽度（含 px 单位）'),
 
-  qqSettingsGuideImageHeight: Schema.string().default('1044px')
+  qqUiSettingsGuideImageHeight: Schema.string().default('1044px')
     .description('📐 手机QQ手动配置指南的 Markdown 图片高度（含 px 单位）'),
-
-  qqSettingsGuideText: Schema.string()
-    .default('请群主按照图片中的步骤，在手机QQ中为群机器人开启“获取群内全部消息”和“机器人主动在群聊内发言”。')
-    .role('textarea', { rows: [2, 5] })
-    .description('📝 手机QQ手动配置指南图片下方的说明文字'),
-  }).description('==== 🖼️ 图片与说明配置 ===='),
+  }).description('==== 📱 手机 QQ UI 手动配置的图片与说明配置 ===='),
 
   // ==== 🐛 调试配置 ====
   Schema.object({

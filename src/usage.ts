@@ -52,7 +52,7 @@ export const usage = `
 
 <h2>⚠️ 前置条件</h2>
 <ul>
-  <li>需要 NapCat (或其他 OneBot 实现) 🐱</li>
+  <li>需要 <a href="https://github.com/NapNeko/NapCatQQ" target="_blank">NapCat</a> (或其他 OneBot V11实现，但是我只测试过<a href="https://github.com/NapNeko/NapCatQQ" target="_blank">Napcat</a>喵) 🐱</li>
   <li>需要 <b>QQ 9.2.90 以上版本</b> 才能打开配置链接 📱</li>
   <li>需要你是<b>群主</b>才能配置 👑</li>
 </ul>
@@ -62,7 +62,7 @@ export const usage = `
 <h2>⌨️ 指令说明</h2>
 
 <h3>1️⃣ napcat-getuser</h3>
-<p>通过 NapCat onebot 接口查询用户信息。仅在 <code>onebot</code> 平台可用。(建议用Napcat，因为其他的我没测过(</p>
+<p>通过 <a href="https://github.com/NapNeko/NapCatQQ" target="_blank">NapCat</a> onebot 接口查询用户信息。仅在 <code>onebot</code> 平台可用。(建议用<a href="https://github.com/NapNeko/NapCatQQ" target="_blank">Napcat</a>，因为其他的我没测过(</p>
 <pre><code>napcat-getuser &lt;userId&gt;</code></pre>
 
 <h3>2️⃣ qqbot-url</h3>
@@ -97,7 +97,8 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
 <p>发送手机QQ机器人全量消息与主动发言手动配置指南。</p>
 <pre><code>qqbot-guide</code></pre>
 <p><b>别名：</b><code>免艾特手动配置指南</code>、<code>全量主动手动配置指南</code></p>
-<p>QQ 平台开启 <code>useMarkdown</code> 时发送内嵌图片的 Markdown；关闭后以及非 QQ 平台发送通用的引用、图片和文字消息段。</p>
+<p>QQ 平台开启 <code>useMarkdown</code> 或 <code>addJumpButton</code> 时发送 Markdown，内容顺序为 Bot 信息、引用说明、可选图片、共享键盘。</p>
+<p>Guide 不接收身份参数；Bot 信息读取默认配置，群号可回退到当前会话，缺失字段显示 <code>-</code>。</p>
 
 <hr>
 
@@ -106,133 +107,36 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
   <tr><th>配置项</th><th>类型</th><th>默认值</th><th>说明</th></tr>
   <tr><td><code>useMarkdown</code></td><td>boolean</td><td><code>true</code></td><td>QQ平台使用 Markdown 富文本发送</td></tr>
   <tr><td><code>addJumpButton</code></td><td>boolean</td><td><code>true</code></td><td>消息底部添加跳转按钮</td></tr>
+  <tr><td><code>qqBotCommandKeyboardJson</code></td><td>string</td><td>见配置页</td><td>两个 qqbot 指令共用的键盘 JSON 模板</td></tr>
   <tr><td><code>defaultBotUin</code></td><td>string</td><td><code>""</code></td><td>默认官Bot QQ号</td></tr>
   <tr><td><code>defaultBotUid</code></td><td>string</td><td><code>""</code></td><td>默认官Bot UID</td></tr>
   <tr><td><code>defaultGroupCode</code></td><td>string</td><td><code>""</code></td><td>默认群号（兜底到当前群）</td></tr>
-  <tr><td><code>showBotInfo</code></td><td>boolean</td><td><code>false</code></td><td>消息中是否显示botUin/botUid/groupCode</td></tr>
-  <tr><td><code>showTransferLinkGuideImage</code></td><td>boolean</td><td><code>true</code></td><td>迁移链接上方附带操作提示图片</td></tr>
-  <tr><td><code>transferLinkGuideImageUrl</code></td><td>string</td><td>gitee 直链</td><td>迁移链接操作提示图片 URL</td></tr>
-  <tr><td><code>transferLinkGuideImageWidth</code></td><td>string</td><td><code>1080px</code></td><td>迁移链接 Markdown 图片宽度</td></tr>
-  <tr><td><code>transferLinkGuideImageHeight</code></td><td>string</td><td><code>888px</code></td><td>迁移链接 Markdown 图片高度</td></tr>
-  <tr><td><code>qqSettingsGuideImageUrl</code></td><td>string</td><td>gitee 直链</td><td>手机QQ手动配置指南图片 URL</td></tr>
-  <tr><td><code>qqSettingsGuideImageWidth</code></td><td>string</td><td><code>1871px</code></td><td>指南 Markdown 图片宽度</td></tr>
-  <tr><td><code>qqSettingsGuideImageHeight</code></td><td>string</td><td><code>1044px</code></td><td>指南 Markdown 图片高度</td></tr>
-  <tr><td><code>qqSettingsGuideText</code></td><td>string</td><td>见配置页</td><td>指南图片下方的说明文字</td></tr>
+  <tr><td><code>showBotInfo</code></td><td>boolean</td><td><code>true</code></td><td>两个 qqbot 指令中是否显示 botUin/botUid/groupCode</td></tr>
+  <tr><td><code>qqTransferLinkGuideText</code></td><td>string</td><td>见配置页</td><td>迁移链接说明文字</td></tr>
+  <tr><td><code>qqTransferLinkGuideShowImage</code></td><td>boolean</td><td><code>true</code></td><td>迁移链接消息附带操作提示图片</td></tr>
+  <tr><td><code>qqTransferLinkGuideImageUrl</code></td><td>string</td><td>jsDelivr 直链</td><td>迁移链接操作提示图片 URL</td></tr>
+  <tr><td><code>qqTransferLinkGuideImageWidth</code></td><td>string</td><td><code>1080px</code></td><td>迁移链接 Markdown 图片宽度</td></tr>
+  <tr><td><code>qqTransferLinkGuideImageHeight</code></td><td>string</td><td><code>888px</code></td><td>迁移链接 Markdown 图片高度</td></tr>
+  <tr><td><code>qqUiSettingsGuideText</code></td><td>string</td><td>见配置页</td><td>手机QQ手动配置指南说明文字</td></tr>
+  <tr><td><code>qqUiSettingsGuideShowImage</code></td><td>boolean</td><td><code>true</code></td><td>手动配置指南附带图片</td></tr>
+  <tr><td><code>qqUiSettingsGuideImageUrl</code></td><td>string</td><td>jsDelivr 直链</td><td>手机QQ手动配置指南图片 URL</td></tr>
+  <tr><td><code>qqUiSettingsGuideImageWidth</code></td><td>string</td><td><code>1871px</code></td><td>指南 Markdown 图片宽度</td></tr>
+  <tr><td><code>qqUiSettingsGuideImageHeight</code></td><td>string</td><td><code>1044px</code></td><td>指南 Markdown 图片高度</td></tr>
   <tr><td><code>missingGroupCodeKeyboardJson</code></td><td>string</td><td>见配置页</td><td>缺群号时键盘按钮JSON</td></tr>
 </table>
 
-<h3> 缺群号按钮 JSON 示例</h3>
+<h3>🎹 两个 qqbot 指令共用的键盘模板</h3>
+<p><code>qqBotCommandKeyboardJson</code> 支持 <code>\${url}</code>、<code>\${jumpActionType}</code>、<code>\${jumpActionData}</code>、<code>\${jumpEnter}</code> 占位符。</p>
+<ul>
+  <li><code>qqbot-url</code> 的第一行按钮会直接打开本次生成的迁移链接。</li>
+  <li><code>qqbot-guide</code> 的第一行按钮会填入待修改群号的跳转指令，第二行执行 <code>/qqbot-guide</code>。</li>
+  <li>模板留空或 JSON 无效时不发送键盘，URL 指令会在 Markdown 正文中显示链接。</li>
+</ul>
 
-<p><b>示例1 - 快速填充指令</b></p>
-<pre><code>{
-  "rows": [{
-    "buttons": [{
-      "id": "cmd_1",
-      "render_data": {
-        "label": "🔢重新输入群号(点我快速填入指令)",
-        "style": 1
-      },
-      "action": {
-        "type": 2,
-        "permission": { "type": 2 },
-        "data": "qqbot-url -g ",
-        "enter": false,
-        "reply": false,
-        "unsupport_tips": "请更新QQ版本后使用"
-      }
-    }]
-  }]
-}</code></pre>
-
-<p><b>示例2 - 跳转网页链接</b></p>
-<pre><code>{
-  "rows": [{
-    "buttons": [{
-      "id": "help_1",
-      "render_data": {
-        "label": "❓查看帮助(url编码规则)",
-        "style": 1
-      },
-      "action": {
-        "type": 0,
-        "permission": { "type": 2 },
-        "data": "https://forum.koishi.xyz/t/topic/12558",
-        "unsupport_tips": "请更新QQ版本后使用"
-      }
-    }]
-  }]
-}</code></pre>
-
-<p><b>示例3 - 两按钮一起</b></p>
-<pre><code>{
-  "rows": [{
-    "buttons": [
-      {
-        "id": "cmd_2",
-        "render_data": {
-          "label": "🔢重新输入群号",
-          "style": 1
-        },
-        "action": {
-          "type": 2,
-          "permission": { "type": 2 },
-          "data": "qqbot-url -g ",
-          "enter": false,
-          "reply": false,
-          "unsupport_tips": "请更新QQ版本后使用"
-        }
-      },
-      {
-        "id": "help_2",
-        "render_data": {
-          "label": "❓查看帮助",
-          "style": 0
-        },
-        "action": {
-          "type": 0,
-          "permission": { "type": 2 },
-          "data": "https://forum.koishi.xyz/t/topic/12558",
-          "unsupport_tips": "请更新QQ版本后使用"
-        }
-      }
-    ]
-  }]
-}</code></pre>
-
-<p><b>示例4 - 一键跳转与手动配置指南</b></p>
-<pre><code>{
-  "rows": [{
-    "buttons": [
-      {
-        "render_data": {
-          "label": "一键跳转免艾特",
-          "style": 1
-        },
-        "action": {
-          "type": 2,
-          "permission": { "type": 2 },
-          "data": "/一键跳转免艾特配置 【在这里填入群号】",
-          "enter": false,
-          "reply": false,
-          "unsupport_tips": "请更新QQ版本后使用"
-        }
-      },
-      {
-        "render_data": {
-          "label": "免艾特手动配置指南",
-          "style": 1
-        },
-        "action": {
-          "type": 2,
-          "permission": { "type": 2 },
-          "data": "/免艾特手动配置指南",
-          "enter": true,
-          "reply": false,
-          "unsupport_tips": "请更新QQ版本后使用"
-        }
-      }
-    ]
-  }]
-}</code></pre>
+<h3>🎹 按钮 JSON 填写示范</h3>
+<ul>
+  <li><a href="https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/missing-group-code-keyboard.md" target="_blank"><code>missingGroupCodeKeyboardJson</code>：缺群号按钮配置</a></li>
+  <li><a href="https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/qqbot-command-keyboard.md" target="_blank"><code>qqBotCommandKeyboardJson</code>：两个 qqbot 指令共用按钮配置</a></li>
+</ul>
 
 `

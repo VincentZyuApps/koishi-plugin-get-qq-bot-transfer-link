@@ -4,6 +4,97 @@ import type { QQKeyboardContent } from './types'
 
 const MSG_TIMEOUT = 5 * 60 * 1000 - 2000
 
+export const DEFAULT_QQ_BOT_COMMAND_KEYBOARD = {
+  rows: [
+    {
+      buttons: [
+        {
+          id: 'jump',
+          render_data: { label: '🌐🔗 打开配置链接', style: 1 },
+          action: {
+            type: '${jumpActionType}',
+            permission: { type: 2 },
+            data: '${jumpActionData}',
+            enter: '${jumpEnter}',
+            reply: false,
+            unsupport_tips: '请更新QQ版本后使用',
+          },
+        },
+      ],
+    },
+    {
+      buttons: [
+        {
+          id: 'guide',
+          render_data: { label: '📱📖 获取手动配置指南', style: 1 },
+          action: {
+            type: 2,
+            permission: { type: 2 },
+            data: '/qqbot-guide',
+            enter: true,
+            reply: false,
+            unsupport_tips: '请更新QQ版本后使用',
+          },
+        },
+      ],
+    },
+  ],
+}
+
+export const DEFAULT_MISSING_GROUP_CODE_KEYBOARD = {
+  rows: [
+    {
+      buttons: [
+        {
+          id: 'fill-group-code',
+          render_data: { label: '一键跳转免艾特', style: 1 },
+          action: {
+            type: 2,
+            permission: { type: 2 },
+            data: '/一键跳转免艾特配置 【在这里填入群号】',
+            enter: false,
+            reply: false,
+            unsupport_tips: '请更新QQ版本后使用',
+          },
+        },
+        {
+          id: 'help-menu',
+          render_data: { label: '玩玩其他的', style: 1 },
+          action: {
+            type: 2,
+            permission: { type: 2 },
+            data: '/帮助菜单',
+            enter: true,
+            reply: false,
+            unsupport_tips: '请更新QQ版本后使用',
+          },
+        },
+      ],
+    },
+  ],
+}
+
+export interface QQBotKeyboardTemplateValues {
+  url: string
+  jumpActionType: number
+  jumpActionData: string
+  jumpEnter: boolean
+}
+
+export function stringifyCompact(obj: { rows: Array<{ buttons: unknown[] }> }): string {
+  let result = '{\n  "rows": [\n'
+
+  for (let rowIndex = 0; rowIndex < obj.rows.length; rowIndex++) {
+    const buttons = obj.rows[rowIndex].buttons.map((button) => `        ${JSON.stringify(button)}`)
+    result += '    {\n      "buttons": [\n'
+    result += buttons.join(',\n')
+    result += '\n      ]\n'
+    result += `    }${rowIndex < obj.rows.length - 1 ? ',' : ''}\n`
+  }
+
+  return `${result}  ]\n}`
+}
+
 // ============ 🎹 键盘 JSON 标准化 ============
 /** 兼容三种键盘 JSON 写法：{"rows":[...]} / [...] / {"content":{"rows":[...]}} */
 function normalizeKeyboardContent(input: unknown): QQKeyboardContent | undefined {
@@ -41,29 +132,56 @@ export function parseKeyboardJson(json: string): QQKeyboardContent | undefined {
   return normalizeKeyboardContent(JSON.parse(trimmed))
 }
 
-// ============ 🔗 跳转按钮构建 ============
-/** 构建「打开配置链接」跳转按钮的 keyboard 结构 */
-export function buildJumpKeyboard(url: string): QQKeyboardContent {
-  return {
-    rows: [
-      {
-        buttons: [
-          {
-            id: 'jump',
-            render_data: {
-              label: '🌐 打开配置链接',
-              style: 1,
-            },
-            action: {
-              type: 0,
-              permission: { type: 2 },
-              data: url,
-              unsupport_tips: '请更新QQ版本后使用',
-            },
-          },
-        ],
-      },
-    ],
+function renderTemplateValue(value: unknown, values: QQBotKeyboardTemplateValues): unknown {
+  if (Array.isArray(value)) {
+    return value.map((item) => renderTemplateValue(item, values))
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, renderTemplateValue(item, values)]),
+    )
+  }
+
+  if (typeof value !== 'string') return value
+
+  const exactMatch = /^\$\{(url|jumpActionType|jumpActionData|jumpEnter)\}$/.exec(value)
+  if (exactMatch) {
+    return values[exactMatch[1] as keyof QQBotKeyboardTemplateValues]
+  }
+
+  return value.replace(/\$\{(url|jumpActionType|jumpActionData|jumpEnter)\}/g, (_, key: keyof QQBotKeyboardTemplateValues) => String(values[key]))
+}
+
+/** 解析并渲染两个 qqbot 指令共用的 keyboard JSON 模板。 */
+export function buildQQBotCommandKeyboard(
+  json: string,
+  values: QQBotKeyboardTemplateValues,
+): QQKeyboardContent | undefined {
+  const trimmed = json?.trim()
+  if (!trimmed) return undefined
+
+  return normalizeKeyboardContent(renderTemplateValue(JSON.parse(trimmed), values))
+}
+
+/** 读取插件配置并构建 qqbot-url / qqbot-guide 共用的键盘。 */
+export function buildConfiguredQQBotCommandKeyboard(
+  session: Session,
+  config: Pick<Config, 'qqBotCommandKeyboardJson'>,
+  values: QQBotKeyboardTemplateValues,
+): QQKeyboardContent | undefined {
+  if (!config.qqBotCommandKeyboardJson?.trim()) return undefined
+
+  try {
+    return buildQQBotCommandKeyboard(config.qqBotCommandKeyboardJson, values)
+  } catch (error) {
+    session.app
+      .logger('get-qq-bot-transfer-link')
+      .warn(
+        'qqBotCommandKeyboardJson parse failed, fallback to no keyboard: %s',
+        (error as Error)?.message || error,
+      )
+    return undefined
   }
 }
 

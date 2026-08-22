@@ -12,9 +12,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 IMAGE_COPIES = {
     Path("doc/tutorial/早期灰度阶段/灰度测试阶段手机QQ点击url弹出的ui的操作提示.png"):
-        Path("doc/images/transfer-link-guide.png"),
+        Path("doc/images/qqbot-url-transfer-link.png"),
     Path("doc/tutorial/灰度结束阶段/3steps.灰度测试结束后手机QQ的ui的操作提示.png"):
-        Path("doc/images/qq-settings-guide.png"),
+        Path("doc/images/qqbot-guide-ui-settings.png"),
 }
 
 
