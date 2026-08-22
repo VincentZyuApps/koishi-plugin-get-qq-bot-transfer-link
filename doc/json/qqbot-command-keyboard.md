@@ -63,7 +63,7 @@
       "buttons": [
         {
           "id": "jump",
-          "render_data": { "label": "打开配置", "style": 1 },
+          "render_data": { "label": "🌐🔗 打开配置", "style": 1 },
           "action": {
             "type": "${jumpActionType}",
             "permission": { "type": 2 },
@@ -75,7 +75,7 @@
         },
         {
           "id": "guide",
-          "render_data": { "label": "手动配置指南", "style": 1 },
+          "render_data": { "label": "📖 手动配置指南", "style": 1 },
           "action": {
             "type": 2,
             "permission": { "type": 2 },
@@ -100,7 +100,7 @@
       "buttons": [
         {
           "id": "jump",
-          "render_data": { "label": "继续配置", "style": 1 },
+          "render_data": { "label": "🔄 继续配置", "style": 1 },
           "action": {
             "type": "${jumpActionType}",
             "permission": { "type": 2 },
@@ -137,7 +137,7 @@
         },
         {
           "id": "help-menu",
-          "render_data": { "label": "玩玩其他的", "style": 0 },
+          "render_data": { "label": "🕹️ 玩玩其他的", "style": 0 },
           "action": {
             "type": 2,
             "permission": { "type": 2 },
@@ -162,7 +162,7 @@
       "buttons": [
         {
           "id": "jump",
-          "render_data": { "label": "打开或填写配置", "style": 1 },
+          "render_data": { "label": "🌐🔗 打开或填写配置", "style": 1 },
           "action": {
             "type": "${jumpActionType}",
             "permission": { "type": 2 },
@@ -178,7 +178,7 @@
       "buttons": [
         {
           "id": "guide",
-          "render_data": { "label": "手机QQ手动配置指南", "style": 1 },
+          "render_data": { "label": "📱📖 手机QQ手动配置指南", "style": 1 },
           "action": {
             "type": 2,
             "permission": { "type": 2 },
@@ -190,7 +190,7 @@
         },
         {
           "id": "help-menu",
-          "render_data": { "label": "帮助菜单", "style": 0 },
+          "render_data": { "label": "🧭 帮助菜单", "style": 0 },
           "action": {
             "type": 2,
             "permission": { "type": 2 },
@@ -206,7 +206,7 @@
       "buttons": [
         {
           "id": "forum",
-          "render_data": { "label": "打开 Koishi 论坛", "style": 0 },
+          "render_data": { "label": "🌐 打开 Koishi 论坛", "style": 0 },
           "action": {
             "type": 0,
             "permission": { "type": 2 },

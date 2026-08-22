@@ -110,7 +110,7 @@ export function registerQQBotUrlCommand(ctx: Context, config: Config) {
         const url = buildTransferUrl(identity)
         const isQQ = session?.platform === 'qq'
 
-        if (isQQ && (config.useMarkdown || config.addJumpButton)) {
+        if (isQQ && (config.useQqMarkdown || config.addJumpButton)) {
           const keyboard = config.addJumpButton
             ? buildConfiguredQQBotCommandKeyboard(session, config, {
               url,

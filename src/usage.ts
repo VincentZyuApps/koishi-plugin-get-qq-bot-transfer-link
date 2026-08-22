@@ -97,7 +97,7 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
 <p>发送手机QQ机器人全量消息与主动发言手动配置指南。</p>
 <pre><code>qqbot-guide</code></pre>
 <p><b>别名：</b><code>免艾特手动配置指南</code>、<code>全量主动手动配置指南</code></p>
-<p>QQ 平台开启 <code>useMarkdown</code> 或 <code>addJumpButton</code> 时发送 Markdown，内容顺序为 Bot 信息、引用说明、可选图片、共享键盘。</p>
+<p>QQ 平台开启 <code>useQqMarkdown</code> 或 <code>addJumpButton</code> 时发送 Markdown，内容顺序为 Bot 信息、引用说明、可选图片、共享键盘。</p>
 <p>Guide 不接收身份参数；Bot 信息读取默认配置，群号可回退到当前会话，缺失字段显示 <code>-</code>。</p>
 
 <hr>
@@ -105,7 +105,7 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
 <h2>⚙️ 配置项</h2>
 <table>
   <tr><th>配置项</th><th>类型</th><th>默认值</th><th>说明</th></tr>
-  <tr><td><code>useMarkdown</code></td><td>boolean</td><td><code>true</code></td><td>QQ平台使用 Markdown 富文本发送</td></tr>
+  <tr><td><code>useQqMarkdown</code></td><td>boolean</td><td><code>true</code></td><td>QQ平台使用 Markdown 富文本发送</td></tr>
   <tr><td><code>addJumpButton</code></td><td>boolean</td><td><code>true</code></td><td>消息底部添加跳转按钮</td></tr>
   <tr><td><code>qqBotCommandKeyboardJson</code></td><td>string</td><td>见配置页</td><td>两个 qqbot 指令共用的键盘 JSON 模板</td></tr>
   <tr><td><code>defaultBotUin</code></td><td>string</td><td><code>""</code></td><td>默认官Bot QQ号</td></tr>
@@ -114,12 +114,12 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
   <tr><td><code>showBotInfo</code></td><td>boolean</td><td><code>true</code></td><td>两个 qqbot 指令中是否显示 botUin/botUid/groupCode</td></tr>
   <tr><td><code>qqTransferLinkGuideText</code></td><td>string</td><td>见配置页</td><td>迁移链接说明文字</td></tr>
   <tr><td><code>qqTransferLinkGuideShowImage</code></td><td>boolean</td><td><code>true</code></td><td>迁移链接消息附带操作提示图片</td></tr>
-  <tr><td><code>qqTransferLinkGuideImageUrl</code></td><td>string</td><td>jsDelivr 直链</td><td>迁移链接操作提示图片 URL</td></tr>
+  <tr><td><code>qqTransferLinkGuideImageUrl</code></td><td>string</td><td>Gitee Raw 直链</td><td>迁移链接操作提示图片 URL</td></tr>
   <tr><td><code>qqTransferLinkGuideImageWidth</code></td><td>string</td><td><code>1080px</code></td><td>迁移链接 Markdown 图片宽度</td></tr>
   <tr><td><code>qqTransferLinkGuideImageHeight</code></td><td>string</td><td><code>888px</code></td><td>迁移链接 Markdown 图片高度</td></tr>
   <tr><td><code>qqUiSettingsGuideText</code></td><td>string</td><td>见配置页</td><td>手机QQ手动配置指南说明文字</td></tr>
   <tr><td><code>qqUiSettingsGuideShowImage</code></td><td>boolean</td><td><code>true</code></td><td>手动配置指南附带图片</td></tr>
-  <tr><td><code>qqUiSettingsGuideImageUrl</code></td><td>string</td><td>jsDelivr 直链</td><td>手机QQ手动配置指南图片 URL</td></tr>
+  <tr><td><code>qqUiSettingsGuideImageUrl</code></td><td>string</td><td>Gitee Raw 直链</td><td>手机QQ手动配置指南图片 URL</td></tr>
   <tr><td><code>qqUiSettingsGuideImageWidth</code></td><td>string</td><td><code>1871px</code></td><td>指南 Markdown 图片宽度</td></tr>
   <tr><td><code>qqUiSettingsGuideImageHeight</code></td><td>string</td><td><code>1044px</code></td><td>指南 Markdown 图片高度</td></tr>
   <tr><td><code>missingGroupCodeKeyboardJson</code></td><td>string</td><td>见配置页</td><td>缺群号时键盘按钮JSON</td></tr>

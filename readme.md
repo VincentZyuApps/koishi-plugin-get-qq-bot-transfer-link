@@ -43,7 +43,7 @@
 
 | 配置项 | 类型 | 默认值 | 说明 |
 |---|---|---|---|
-| `useMarkdown` | boolean | `true` | QQ平台使用 Markdown 富文本发送 |
+| `useQqMarkdown` | boolean | `true` | QQ平台使用 Markdown 富文本发送 |
 | `addJumpButton` | boolean | `true` | 两个 `qqbot-*` 指令底部添加共享键盘 |
 | `qqBotCommandKeyboardJson` | string | 见配置页 | 两个 `qqbot-*` 指令共用的键盘 JSON 模板 |
 | `defaultBotUin` | string | `""` | 默认官Bot QQ号（option 兜底） |
@@ -54,12 +54,12 @@
 | `qqMarkdownBotInfoStyle` | `text`/`bold`/`inline`/`table` | `bold` | Bot 信息在 Markdown 中的展示样式 |
 | `qqTransferLinkGuideText` | string | 见配置页 | 迁移链接说明文字 |
 | `qqTransferLinkGuideShowImage` | boolean | `true` | 迁移链接消息附带操作提示图片 |
-| `qqTransferLinkGuideImageUrl` | string | jsDelivr 直链 | 迁移链接操作提示图片 URL |
+| `qqTransferLinkGuideImageUrl` | string | Gitee Raw 直链 | 迁移链接操作提示图片 URL |
 | `qqTransferLinkGuideImageWidth` | string | `1080px` | 迁移链接 Markdown 图片宽度 |
 | `qqTransferLinkGuideImageHeight` | string | `888px` | 迁移链接 Markdown 图片高度 |
 | `qqUiSettingsGuideText` | string | 见配置页 | 手机QQ手动配置指南说明文字 |
 | `qqUiSettingsGuideShowImage` | boolean | `true` | 手动配置指南附带图片 |
-| `qqUiSettingsGuideImageUrl` | string | jsDelivr 直链 | 手机QQ手动配置指南图片 URL |
+| `qqUiSettingsGuideImageUrl` | string | Gitee Raw 直链 | 手机QQ手动配置指南图片 URL |
 | `qqUiSettingsGuideImageWidth` | string | `1871px` | 手动配置指南 Markdown 图片宽度 |
 | `qqUiSettingsGuideImageHeight` | string | `1044px` | 手动配置指南 Markdown 图片高度 |
 | `missingGroupCodeSendMode` | `text`/`markdown`/`markdown_button` | `markdown` | 缺群号时 QQ 平台的发送模式 |
@@ -92,7 +92,7 @@
 
 **别名：** `免艾特手动配置指南`、`全量主动手动配置指南`
 
-QQ 平台开启 `useMarkdown` 或 `addJumpButton` 时发送 Markdown，顺序为 Bot 信息、引用说明、可选图片、共享键盘。Guide 不接收身份参数，Bot 信息读取默认配置，群号可继续回退到当前会话，缺失字段显示 `-`。
+QQ 平台开启 `useQqMarkdown` 或 `addJumpButton` 时发送 Markdown，顺序为 Bot 信息、引用说明、可选图片、共享键盘。Guide 不接收身份参数，Bot 信息读取默认配置，群号可继续回退到当前会话，缺失字段显示 `-`。
 
 ## 🎹 两个 qqbot 指令共用的键盘模板
 

@@ -1,7 +1,21 @@
 """
-重要：doc/tutorial 下的中文文件名图片是原始文件，必须保留，不能删除或改名。
-doc/images 下的英文文件名图片仅用于 CDN 直链。
-以后中文原图更新后，重新运行本脚本即可覆盖并同步英文 CDN 副本。
+💡 重要：doc/tutorial 下的中文文件名图片是原始文件，必须保留，不能删除或改名。
+🔄 中文原图更新后，重新运行本脚本即可覆盖并同步 doc/images 下的英文副本。
+
+🟧 【✅ 可用于 QQ Bot Markdown 内嵌图片】Gitee Raw 使用 doc/images 下的英文文件名副本，地址格式为：
+🔗 https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/images/<file>.png
+🖼️ https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/images/qqbot-url-transfer-link.png
+🖼️ https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/images/qqbot-guide-ui-settings.png
+
+⬛ 【❌ 不可用于 QQ Bot Markdown 内嵌图片】GitHub Raw 使用同一份英文文件名副本，地址格式为：
+🔗 https://raw.githubusercontent.com/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link/main/doc/images/<file>.png
+🖼️ https://raw.githubusercontent.com/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link/main/doc/images/qqbot-url-transfer-link.png
+🖼️ https://raw.githubusercontent.com/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link/main/doc/images/qqbot-guide-ui-settings.png
+
+🟦 【❌ 不可用于 QQ Bot Markdown 内嵌图片】jsDelivr CDN 也使用同一份英文文件名副本，地址格式为：
+🔗 https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/<file>.png
+🖼️ https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/qqbot-url-transfer-link.png
+🖼️ https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/qqbot-guide-ui-settings.png
 """
 
 from pathlib import Path

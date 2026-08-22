@@ -24,7 +24,7 @@ export function registerQQBotGuideCommand(ctx: Context, config: Config) {
       if (!session) return
       const identity = resolveGuideIdentity(session, config)
 
-      if (session.platform === 'qq' && (config.useMarkdown || config.addJumpButton)) {
+      if (session.platform === 'qq' && (config.useQqMarkdown || config.addJumpButton)) {
         const keyboard = config.addJumpButton
           ? buildConfiguredQQBotCommandKeyboard(session, config, {
             url: '',

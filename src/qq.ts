@@ -47,7 +47,7 @@ export const DEFAULT_MISSING_GROUP_CODE_KEYBOARD = {
       buttons: [
         {
           id: 'fill-group-code',
-          render_data: { label: '一键跳转免艾特', style: 1 },
+          render_data: { label: '🔄 再试一次', style: 1 },
           action: {
             type: 2,
             permission: { type: 2 },
@@ -58,8 +58,24 @@ export const DEFAULT_MISSING_GROUP_CODE_KEYBOARD = {
           },
         },
         {
+          id: 'manual-guide',
+          render_data: { label: '📖 手动配置', style: 1 },
+          action: {
+            type: 2,
+            permission: { type: 2 },
+            data: '/qqbot-guide',
+            enter: true,
+            reply: false,
+            unsupport_tips: '请更新QQ版本后使用',
+          },
+        },
+      ],
+    },
+    {
+      buttons: [
+        {
           id: 'help-menu',
-          render_data: { label: '玩玩其他的', style: 1 },
+          render_data: { label: '🕹️ 玩玩其他的', style: 1 },
           action: {
             type: 2,
             permission: { type: 2 },
