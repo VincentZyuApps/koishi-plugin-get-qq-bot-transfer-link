@@ -1,5 +1,5 @@
 * text eol=lf
-*.md linguist-detectable=true
+*.md linguist-detectable=true -linguist-documentation
 
 *.png -text
 *.jpg -text
