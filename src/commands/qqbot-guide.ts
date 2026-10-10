@@ -4,8 +4,11 @@ import {
   buildQQUiSettingsGuideElements,
   buildQQUiSettingsGuideMarkdown,
 } from '../message'
+import { pickImageUrl } from '../image'
 import { buildConfiguredQQBotCommandKeyboard, trySendQQRawMarkdown } from '../qq'
 import type { BotIdentity } from '../types'
+
+const PLUGIN_NAME = 'get-qq-bot-transfer-link'
 
 function resolveGuideIdentity(session: any, config: Config): BotIdentity {
   return {
@@ -23,6 +26,25 @@ export function registerQQBotGuideCommand(ctx: Context, config: Config) {
     .action(async ({ session }) => {
       if (!session) return
       const identity = resolveGuideIdentity(session, config)
+      const picked = await pickImageUrl(
+        config.qqUiSettingsGuideImageUrl,
+        config.qqUiSettingsGuideProbeEnable,
+      )
+
+      if (picked.probeAllFailed) {
+        session.app.logger(PLUGIN_NAME).warn(
+          'qqUiSettingsGuideImageUrl probe failed for all candidates, fallback to first non-empty entry',
+        )
+      }
+
+      if (config.verboseConsoleLog) {
+        session.app.logger(PLUGIN_NAME).info(
+          'qqbot-guide pickImageUrl probe=%s allFailed=%s url=%s',
+          picked.probed,
+          picked.probeAllFailed,
+          picked.url || '<empty>',
+        )
+      }
 
       if (session.platform === 'qq' && (config.useQqMarkdown || config.addJumpButton)) {
         const keyboard = config.addJumpButton
@@ -33,7 +55,7 @@ export function registerQQBotGuideCommand(ctx: Context, config: Config) {
             jumpEnter: false,
           })
           : undefined
-        const markdownContent = buildQQUiSettingsGuideMarkdown(identity, config)
+        const markdownContent = buildQQUiSettingsGuideMarkdown(identity, config, picked.url)
         const sent = await trySendQQRawMarkdown(
           session,
           markdownContent,
@@ -44,6 +66,6 @@ export function registerQQBotGuideCommand(ctx: Context, config: Config) {
         if (sent) return
       }
 
-      await session.send(buildQQUiSettingsGuideElements(session.messageId, identity, config))
+      await session.send(buildQQUiSettingsGuideElements(session.messageId, identity, config, picked.url))
     })
 }

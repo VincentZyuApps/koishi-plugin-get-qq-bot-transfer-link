@@ -2,6 +2,7 @@ import { h } from 'koishi'
 import type { Context } from 'koishi'
 import type { Config } from '../config'
 import { buildTransferMarkdown, buildTransferPlainText } from '../message'
+import { pickImageUrl } from '../image'
 import {
   buildConfiguredQQBotCommandKeyboard,
   parseKeyboardJson,
@@ -109,6 +110,25 @@ export function registerQQBotUrlCommand(ctx: Context, config: Config) {
         const { identity } = result
         const url = buildTransferUrl(identity)
         const isQQ = session?.platform === 'qq'
+        const picked = await pickImageUrl(
+          config.qqTransferLinkGuideImageUrl,
+          config.qqTransferLinkGuideProbeEnable,
+        )
+
+        if (picked.probeAllFailed) {
+          ctx.logger(PLUGIN_NAME).warn(
+            'qqTransferLinkGuideImageUrl probe failed for all candidates, fallback to first non-empty entry',
+          )
+        }
+
+        if (config.verboseConsoleLog) {
+          ctx.logger(PLUGIN_NAME).info(
+            'qqbot-url pickImageUrl probe=%s allFailed=%s url=%s',
+            picked.probed,
+            picked.probeAllFailed,
+            picked.url || '<empty>',
+          )
+        }
 
         if (isQQ && (config.useQqMarkdown || config.addJumpButton)) {
           const keyboard = config.addJumpButton
@@ -119,13 +139,13 @@ export function registerQQBotUrlCommand(ctx: Context, config: Config) {
               jumpEnter: false,
             })
             : undefined
-          const markdownContent = buildTransferMarkdown(identity, url, config)
+          const markdownContent = buildTransferMarkdown(identity, url, config, picked.url)
           const sent = await trySendQQRawMarkdown(session, markdownContent, keyboard, config)
 
           if (sent) return
         }
 
-        await session?.send(buildTransferPlainText(identity, url, config))
+        await session?.send(buildTransferPlainText(identity, url, config, picked.url))
         return
       }
 

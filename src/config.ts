@@ -46,8 +46,10 @@ export interface Config {
   qqTransferLinkGuideText: string
   /** 🖼️ 是否在迁移链接消息中附带操作提示图片 🖼️ */
   qqTransferLinkGuideShowImage: boolean
-  /** 🖼️ 迁移链接操作提示图片的 URL 🖼️ */
-  qqTransferLinkGuideImageUrl: string
+  /** 🖼️ 迁移链接操作提示图片 URL 列表（数组顺序即优先级，发送时取第一个非空项）🖼️ */
+  qqTransferLinkGuideImageUrl: string[]
+  /** 🧪 发送时自动探测迁移链接图片 URL（实验性）🧪 */
+  qqTransferLinkGuideProbeEnable: boolean
   /** 📐 迁移链接 Markdown 图片宽度（含 px 单位）📐 */
   qqTransferLinkGuideImageWidth: string
   /** 📐 迁移链接 Markdown 图片高度（含 px 单位）📐 */
@@ -60,8 +62,10 @@ export interface Config {
   qqUiSettingsGuideText: string
   /** 🖼️ 是否显示手机 QQ 手动配置指南图片 🖼️ */
   qqUiSettingsGuideShowImage: boolean
-  /** 🖼️ 手机 QQ 手动配置指南图片 URL 🖼️ */
-  qqUiSettingsGuideImageUrl: string
+  /** 🖼️ 手机 QQ 手动配置指南图片 URL 列表（数组顺序即优先级，发送时取第一个非空项）🖼️ */
+  qqUiSettingsGuideImageUrl: string[]
+  /** 🧪 发送时自动探测手动配置指南图片 URL（实验性）🧪 */
+  qqUiSettingsGuideProbeEnable: boolean
   /** 📐 手机 QQ 手动配置指南 Markdown 图片宽度 📐 */
   qqUiSettingsGuideImageWidth: string
   /** 📐 手机 QQ 手动配置指南 Markdown 图片高度 📐 */
@@ -178,11 +182,21 @@ export const Config: Schema<Config> = Schema.intersect([
     .default(true)
     .description('🖼️ 在迁移链接消息中附带操作提示图片'),
 
-  /** 🖼️ qqTransferLinkGuideImageUrl — 迁移链接操作提示图片 URL 🖼️ */
-  qqTransferLinkGuideImageUrl: Schema.string()
-    .default('https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/images/qqbot-url-transfer-link.png')
-    .role('textarea', { rows: [2, 5] })
-    .description('🖼️ 迁移链接操作提示图片的 URL（Markdown 中显示在链接/按钮上方）'),
+  /** 🖼️ qqTransferLinkGuideImageUrl — 迁移链接操作提示图片 URL 列表 🖼️ */
+  qqTransferLinkGuideImageUrl: Schema.array(Schema.string())
+    .default([
+      'https://gh-proxy.org/https://raw.githubusercontent.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link/main/doc/images/qqbot-url-transfer-link.png',
+      'https://raw.githubusercontent.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link/main/doc/images/qqbot-url-transfer-link.png',
+      'https://cdn.jsdelivr.net/gh/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/qqbot-url-transfer-link.png',
+      'https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/images/qqbot-url-transfer-link.png',
+    ])
+    .description('🖼️ 迁移链接操作提示图片 URL 列表，数组顺序即优先级，发送时取第一个非空项。<br/><i>背景：QQ 官方 Markdown 图片要求直链 200 直出，Gitee raw 会 302 跳转导致 QQ 爬虫抓取失败（图不显示），故默认首选 gh-proxy 代理的 GitHub 直链</i>'),
+
+  /** 🧪 qqTransferLinkGuideProbeEnable — 发送时自动探测图片 URL 🧪 */
+  qqTransferLinkGuideProbeEnable: Schema.boolean()
+    .default(false)
+    .experimental()
+    .description('🧪 实验性：开启后发送时逐个探测图片 URL（5s 超时），选用第一个 200 直出、无重定向且 content-type 为 image 的地址；全部失败回退第一个非空项并 warn。<br/><i>注意：探测拒绝重定向，jsDelivr / Gitee 这类跳转型镜像会被跳过</i>'),
 
   /** 📐 qqTransferLinkGuideImageWidth — 迁移链接 Markdown 图片宽度 📐 */
   qqTransferLinkGuideImageWidth: Schema.string()
@@ -213,11 +227,21 @@ export const Config: Schema<Config> = Schema.intersect([
     .default(true)
     .description('🖼️ 在手机QQ手动配置指南消息中附带操作图片'),
 
-  /** 🖼️ qqUiSettingsGuideImageUrl — 手机 QQ UI 手动配置指南图片 URL 🖼️ */
-  qqUiSettingsGuideImageUrl: Schema.string()
-    .default('https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/images/qqbot-guide-ui-settings.png')
-    .role('textarea', { rows: [2, 5] })
-    .description('🖼️ 手机QQ机器人全量消息与主动发言手动配置指南图片 URL'),
+  /** 🖼️ qqUiSettingsGuideImageUrl — 手机 QQ UI 手动配置指南图片 URL 列表 🖼️ */
+  qqUiSettingsGuideImageUrl: Schema.array(Schema.string())
+    .default([
+      'https://gh-proxy.org/https://raw.githubusercontent.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link/main/doc/images/qqbot-guide-ui-settings.png',
+      'https://raw.githubusercontent.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link/main/doc/images/qqbot-guide-ui-settings.png',
+      'https://cdn.jsdelivr.net/gh/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/qqbot-guide-ui-settings.png',
+      'https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/images/qqbot-guide-ui-settings.png',
+    ])
+    .description('🖼️ 手机QQ机器人全量消息与主动发言手动配置指南图片 URL 列表，数组顺序即优先级，发送时取第一个非空项。<br/><i>背景：QQ 官方 Markdown 图片要求直链 200 直出，Gitee raw 会 302 跳转导致 QQ 爬虫抓取失败（图不显示），故默认首选 gh-proxy 代理的 GitHub 直链</i>'),
+
+  /** 🧪 qqUiSettingsGuideProbeEnable — 发送时自动探测图片 URL 🧪 */
+  qqUiSettingsGuideProbeEnable: Schema.boolean()
+    .default(false)
+    .experimental()
+    .description('🧪 实验性：开启后发送时逐个探测图片 URL（5s 超时），选用第一个 200 直出、无重定向且 content-type 为 image 的地址；全部失败回退第一个非空项并 warn。<br/><i>注意：探测拒绝重定向，jsDelivr / Gitee 这类跳转型镜像会被跳过</i>'),
 
   /** 📐 qqUiSettingsGuideImageWidth — 手机 QQ UI 指南 Markdown 图片宽度 📐 */
   qqUiSettingsGuideImageWidth: Schema.string()

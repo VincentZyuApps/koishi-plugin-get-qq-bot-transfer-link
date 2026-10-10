@@ -25,6 +25,7 @@ export function buildTransferMarkdown(
   identity: BotIdentity,
   url: string,
   config: Config,
+  imageUrl: string | undefined,
 ): string {
   const { botUin, botUid, groupCode } = identity
   const blocks = ['## 🔗 官Bot全量主动配置链接']
@@ -37,8 +38,8 @@ export function buildTransferMarkdown(
     blocks.push(`> ${config.qqTransferLinkGuideText}`)
   }
 
-  if (config.qqTransferLinkGuideShowImage) {
-    blocks.push(`![ #${config.qqTransferLinkGuideImageWidth} #${config.qqTransferLinkGuideImageHeight}](${config.qqTransferLinkGuideImageUrl})`)
+  if (config.qqTransferLinkGuideShowImage && imageUrl) {
+    blocks.push(`![ #${config.qqTransferLinkGuideImageWidth} #${config.qqTransferLinkGuideImageHeight}](${imageUrl})`)
   }
 
   if (config.qqTransferLinkGuideShowUrl) {
@@ -52,6 +53,7 @@ export function buildTransferPlainText(
   identity: BotIdentity,
   url: string,
   config: Config,
+  imageUrl: string | undefined,
 ): string {
   const { botUin, botUid, groupCode } = identity
   const blocks = []
@@ -64,8 +66,8 @@ export function buildTransferPlainText(
     blocks.push(config.qqTransferLinkGuideText)
   }
 
-  if (config.qqTransferLinkGuideShowImage) {
-    blocks.push(`${h.image(config.qqTransferLinkGuideImageUrl)}`)
+  if (config.qqTransferLinkGuideShowImage && imageUrl) {
+    blocks.push(`${h.image(imageUrl)}`)
   }
 
   if (config.qqTransferLinkGuideShowUrl) {
@@ -78,6 +80,7 @@ export function buildTransferPlainText(
 export function buildQQUiSettingsGuideMarkdown(
   identity: BotIdentity,
   config: Config,
+  imageUrl: string | undefined,
 ): string {
   const blocks = ['## 📖 官Bot全量手动UI配置指南']
 
@@ -89,8 +92,8 @@ export function buildQQUiSettingsGuideMarkdown(
     blocks.push(`> ${config.qqUiSettingsGuideText}`)
   }
 
-  if (config.qqUiSettingsGuideShowImage) {
-    blocks.push(`![ #${config.qqUiSettingsGuideImageWidth} #${config.qqUiSettingsGuideImageHeight}](${config.qqUiSettingsGuideImageUrl})`)
+  if (config.qqUiSettingsGuideShowImage && imageUrl) {
+    blocks.push(`![ #${config.qqUiSettingsGuideImageWidth} #${config.qqUiSettingsGuideImageHeight}](${imageUrl})`)
   }
 
   if (!blocks.length) blocks.push('手机 QQ 机器人手动配置指南')
@@ -101,6 +104,7 @@ export function buildQQUiSettingsGuideElements(
   messageId: string | undefined,
   identity: BotIdentity,
   config: Config,
+  imageUrl: string | undefined,
 ) {
   const elements = []
   if (messageId) elements.push(h.quote(messageId))
@@ -108,6 +112,6 @@ export function buildQQUiSettingsGuideElements(
     elements.push(`🆔 botUin：${identity.botUin}\n🔑 botUid：${identity.botUid}\n👥 groupCode：${identity.groupCode}\n\n`)
   }
   if (config.qqUiSettingsGuideText) elements.push(`${config.qqUiSettingsGuideText}\n\n`)
-  if (config.qqUiSettingsGuideShowImage) elements.push(h.image(config.qqUiSettingsGuideImageUrl))
+  if (config.qqUiSettingsGuideShowImage && imageUrl) elements.push(h.image(imageUrl))
   return elements
 }
