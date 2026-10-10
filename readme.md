@@ -105,8 +105,8 @@ QQ 平台开启 `useQqMarkdown` 或 `addJumpButton` 时发送 Markdown，顺序�
 
 ## 🎹 按钮 JSON 填写示范
 
-- [`missingGroupCodeKeyboardJson`：缺群号按钮配置](https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/missing-group-code-keyboard.md)
-- [`qqBotCommandKeyboardJson`：两个 qqbot 指令共用按钮配置](https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/qqbot-command-keyboard.md)
+- [`missingGroupCodeKeyboardJson`：缺群号按钮配置](doc/json/missing-group-code-keyboard.md)
+- [`qqBotCommandKeyboardJson`：两个 qqbot 指令共用按钮配置](doc/json/qqbot-command-keyboard.md)
 
 ## ✨ 效果
 
