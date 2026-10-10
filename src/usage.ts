@@ -140,7 +140,7 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
 <h4>🖼️ 图片 URL 列表说明</h4>
 <p>两处图片配置均为 URL 数组，<b>数组顺序即优先级</b>，发送时取第一个非空项。默认顺序：<code>gh-proxy.org 代理</code> → <code>GitHub raw 直连</code> → <code>jsDelivr</code> → <code>Gitee raw</code>。</p>
 <p><b>背景：</b>QQ 官方 Markdown 图片要求直链 200 直出，<code>Gitee raw</code> 会 302 跳转导致 QQ 爬虫抓取失败（消息里图不显示），所以默认首选 gh-proxy 代理的 GitHub 直链。</p>
-<p><b>🧪 探测开关（实验性，默认关闭）：</b>开启后发送时逐个探测（5s 超时），选用第一个 200 直出、<b>无重定向</b>且 content-type 为 <code>image/*</code> 的地址；全部失败回退第一个非空项并 warn。注意 jsDelivr / Gitee 这类跳转型镜像会被探测跳过。</p>
+<p><b>🧪 探测开关（实验性，默认开启）：</b>开启后发送时逐个探测（5s 超时），选用第一个 200 直出、<b>无重定向</b>且 content-type 为 <code>image/*</code> 的地址；全部失败回退第一个非空项并 warn。注意 jsDelivr / Gitee 这类跳转型镜像会被探测跳过。</p>
 
 <h3>🎹 两个 qqbot 指令共用的键盘模板</h3>
 <p><code>qqBotCommandKeyboardJson</code> 支持 <code>\${url}</code>、<code>\${jumpActionType}</code>、<code>\${jumpActionData}</code>、<code>\${jumpEnter}</code> 占位符。</p>

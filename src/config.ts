@@ -190,11 +190,12 @@ export const Config: Schema<Config> = Schema.intersect([
       'https://cdn.jsdelivr.net/gh/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/qqbot-url-transfer-link.png',
       'https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/images/qqbot-url-transfer-link.png',
     ])
+    .role('table')
     .description('🖼️ 迁移链接操作提示图片 URL 列表，数组顺序即优先级，发送时取第一个非空项。<br/><i>背景：QQ 官方 Markdown 图片要求直链 200 直出，Gitee raw 会 302 跳转导致 QQ 爬虫抓取失败（图不显示），故默认首选 gh-proxy 代理的 GitHub 直链</i>'),
 
   /** 🧪 qqTransferLinkGuideProbeEnable — 发送时自动探测图片 URL 🧪 */
   qqTransferLinkGuideProbeEnable: Schema.boolean()
-    .default(false)
+    .default(true)
     .experimental()
     .description('🧪 实验性：开启后发送时逐个探测图片 URL（5s 超时），选用第一个 200 直出、无重定向且 content-type 为 image 的地址；全部失败回退第一个非空项并 warn。<br/><i>注意：探测拒绝重定向，jsDelivr / Gitee 这类跳转型镜像会被跳过</i>'),
 
@@ -235,11 +236,12 @@ export const Config: Schema<Config> = Schema.intersect([
       'https://cdn.jsdelivr.net/gh/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/qqbot-guide-ui-settings.png',
       'https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/raw/main/doc/images/qqbot-guide-ui-settings.png',
     ])
+    .role('table')
     .description('🖼️ 手机QQ机器人全量消息与主动发言手动配置指南图片 URL 列表，数组顺序即优先级，发送时取第一个非空项。<br/><i>背景：QQ 官方 Markdown 图片要求直链 200 直出，Gitee raw 会 302 跳转导致 QQ 爬虫抓取失败（图不显示），故默认首选 gh-proxy 代理的 GitHub 直链</i>'),
 
   /** 🧪 qqUiSettingsGuideProbeEnable — 发送时自动探测图片 URL 🧪 */
   qqUiSettingsGuideProbeEnable: Schema.boolean()
-    .default(false)
+    .default(true)
     .experimental()
     .description('🧪 实验性：开启后发送时逐个探测图片 URL（5s 超时），选用第一个 200 直出、无重定向且 content-type 为 image 的地址；全部失败回退第一个非空项并 warn。<br/><i>注意：探测拒绝重定向，jsDelivr / Gitee 这类跳转型镜像会被跳过</i>'),
 
