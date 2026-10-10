@@ -28,7 +28,7 @@ export const usage = `
     <img src="https://img.shields.io/npm/dm/koishi-plugin-get-qq-bot-transfer-link?style=flat-square&logo=npm" alt="npm downloads">
   </a>
   <br>
-  <a href="https://github.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link" target="_blank">
+  <a href="https://github.com/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
   </a>
   <a href="https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link" target="_blank">
@@ -160,13 +160,13 @@ qqbot-url -u &lt;botUin&gt; -i &lt;botUid&gt; -g &lt;groupCode&gt;  # 全部指�
   <tr>
     <td><code>missingGroupCodeKeyboardJson</code></td>
     <td>缺群号按钮配置</td>
-    <td><a href="https://github.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/missing-group-code-keyboard.md" target="_blank" style="color: #2563eb; font-style: italic; text-decoration: underline;">点我看示范</a></td>
+    <td><a href="https://github.com/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/missing-group-code-keyboard.md" target="_blank" style="color: #2563eb; font-style: italic; text-decoration: underline;">点我看示范</a></td>
     <td><a href="https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/missing-group-code-keyboard.md" target="_blank" style="color: #2563eb; font-style: italic; text-decoration: underline;">点我看示范</a></td>
   </tr>
   <tr>
     <td><code>qqBotCommandKeyboardJson</code></td>
     <td>两个 qqbot 指令共用按钮配置</td>
-    <td><a href="https://github.com/VincentZyu233/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/qqbot-command-keyboard.md" target="_blank" style="color: #2563eb; font-style: italic; text-decoration: underline;">点我看示范</a></td>
+    <td><a href="https://github.com/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/qqbot-command-keyboard.md" target="_blank" style="color: #2563eb; font-style: italic; text-decoration: underline;">点我看示范</a></td>
     <td><a href="https://gitee.com/vincent-zyu/koishi-plugin-get-qq-bot-transfer-link/blob/main/doc/json/qqbot-command-keyboard.md" target="_blank" style="color: #2563eb; font-style: italic; text-decoration: underline;">点我看示范</a></td>
   </tr>
 </table>
