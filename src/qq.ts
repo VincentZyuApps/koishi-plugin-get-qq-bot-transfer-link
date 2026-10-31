@@ -201,47 +201,24 @@ export function buildConfiguredQQBotCommandKeyboard(
   }
 }
 
-// ============ 📦 RawMarkdown 元素构建 ============
-/** 构建 QQ rawmarkdown 消息元素（仅 crack adapter 支持） */
-function buildRawMarkdownElement(
-  markdownContent: string,
-  keyboard?: QQKeyboardContent,
-) {
-  const payload: Record<string, unknown> = {
-    markdown: {
-      content: markdownContent,
-    },
-  }
-
-  if (keyboard?.rows?.length) {
-    payload.keyboard = {
-      content: keyboard,
-    }
-  }
-
-  return h('qq:rawmarkdown', payload)
-}
-
-// ============ 🚀 Crack Adapter 发送 ============
-/** 通过 crack adapter 发送 QQ Markdown（走 h('qq:rawmarkdown') 元素层） */
-async function sendViaCrackAdapter(
+// ============ 📤 Markdown 消息发送 ============
+/** 发送 QQ Markdown 消息，优先走 bot.internal 直调，缺失时兜底降级为元素解析 */
+export async function sendQQRawMarkdown(
   session: Session,
   markdownContent: string,
   keyboard?: QQKeyboardContent,
+  config?: Pick<Config, 'verboseConsoleLog'>,
   quoteMessageId?: string,
 ): Promise<void> {
-  const markdown = buildRawMarkdownElement(markdownContent, keyboard)
-  await session.send(quoteMessageId ? [h.quote(quoteMessageId), markdown] : markdown)
-}
+  if (session.platform !== 'qq') return
 
-// ============ 🔧 官方 Adapter 发送 ============
-/** 通过官方 adapter 发送 QQ Markdown（走 internal API，含被动回复 msg_id/msg_seq 处理） */
-async function sendViaOfficialAdapter(
-  session: Session,
-  markdownContent: string,
-  keyboard?: QQKeyboardContent,
-  quoteMessageId?: string,
-): Promise<void> {
+  const logger = session.app.logger('get-qq-bot-transfer-link')
+  const internal = (session.bot as any)?.internal
+
+  if (config?.verboseConsoleLog) {
+    logger.info('sendQQRawMarkdown mode=%s, content=%s', internal ? 'internal' : 'fallback-element', markdownContent.slice(0, 100))
+  }
+
   const payload: Record<string, unknown> = {
     msg_type: 2,
     markdown: {
@@ -261,39 +238,36 @@ async function sendViaOfficialAdapter(
     }
   }
 
-  const s = session as any
-  if (s.messageId && s.timestamp && Date.now() - s.timestamp < MSG_TIMEOUT) {
-    s.seq ||= 0
-    payload.msg_id = s.messageId
-    payload.msg_seq = ++s.seq
+  if (internal) {
+    const s = session as any
+    if (s.messageId && s.timestamp && Date.now() - s.timestamp < MSG_TIMEOUT) {
+      s.seq ||= 0
+      payload.msg_id = s.messageId
+      payload.msg_seq = ++s.seq
+    }
+
+    if (session.isDirect) {
+      const targetId = session.guildId || session.channelId || session.userId
+      await internal.sendPrivateMessage(targetId, payload)
+    } else {
+      await internal.sendMessage(session.channelId, payload)
+    }
+    return
   }
 
-  await (session.bot as any).internal.sendMessage(session.channelId, payload)
-}
-
-// ============ 📤 Markdown 消息发送 ============
-/** 发送 QQ Markdown 消息，自动检测适配器类型选择发送路径 */
-export async function sendQQRawMarkdown(
-  session: Session,
-  markdownContent: string,
-  keyboard?: QQKeyboardContent,
-  config?: Pick<Config, 'verboseConsoleLog'>,
-  quoteMessageId?: string,
-): Promise<void> {
-  if (session.platform !== 'qq') return
-
-  const logger = session.app.logger('get-qq-bot-transfer-link')
-  const isCrack = !!(session.bot as any)?.config?.autoStreamText
-
-  if (config?.verboseConsoleLog) {
-    logger.info('sendQQRawMarkdown adapter=%s, content=%s', isCrack ? 'crack' : 'official', markdownContent.slice(0, 100))
+  // 兜底降级：在缺少 internal 时走 qq:rawmarkdown 元素
+  const fallbackPayload: Record<string, unknown> = {
+    markdown: {
+      content: markdownContent,
+    },
   }
-
-  if (isCrack) {
-    await sendViaCrackAdapter(session, markdownContent, keyboard, quoteMessageId)
-  } else {
-    await sendViaOfficialAdapter(session, markdownContent, keyboard, quoteMessageId)
+  if (keyboard?.rows?.length) {
+    fallbackPayload.keyboard = {
+      content: keyboard,
+    }
   }
+  const markdown = h('qq:rawmarkdown', fallbackPayload)
+  await session.send(quoteMessageId ? [h.quote(quoteMessageId), markdown] : markdown)
 }
 
 // ============ 🛡️ Markdown 消息发送（带降级） ============
