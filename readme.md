@@ -113,38 +113,38 @@ QQ 平台开启 `useQqMarkdown` 或 `addJumpButton` 时发送 Markdown，顺序�
 ### 1️⃣ napcat-getuser
 > ↓ 下方图片: 使用 `napcat-getuser <官Bot QQ号>` 查询官Bot信息，并从返回 JSON 中取得 `uid` 与 `uin`。
 
-![0.napcat-getuser.png](doc/images/preview/0.napcat-getuser.png)
+![0.napcat-getuser.png](https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/preview/0.napcat-getuser.png)
 
 ### 2️⃣ qqbot-url
 > ↓ 下方图片: 手机QQ打开迁移链接后，在授权页面开启“获取群内全部消息”和“机器人主动在群聊内发言”，然后点击“同意授权”。
 
 <div style="display: inline-block; border: 3px solid #12B7F5; border-radius: 8px; padding: 8px;">
-  <img src="doc/images/qqbot-url-transfer-link.png" alt="qqbot-url 迁移链接操作提示" style="display: block; max-width: 100%; border-radius: 4px;">
+  <img src="https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/qqbot-url-transfer-link.png" alt="qqbot-url 迁移链接操作提示" style="display: block; max-width: 100%; border-radius: 4px;">
 </div>
 
 > ↓ 下方图片: `qqbot-url` 的帮助、缺少群号提示、传入群号后的链接消息，以及 Markdown 按钮发送效果。
 
-![1.qqbot-url.png](doc/images/preview/1.qqbot-url.png)
+![1.qqbot-url.png](https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/preview/1.qqbot-url.png)
 
 > ↓ 下方图片: 手机QQ弹出的机器人群聊权限授权窗口，确认开启两个权限后点击“同意授权”。
 
-![2.qqbot-url.png](doc/images/preview/2.qqbot-url.png)
+![2.qqbot-url.png](https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/preview/2.qqbot-url.png)
 
 > ↓ 下方图片: 手机QQ权限页中“获取群内全部消息”和“机器人主动在群聊内发言”的具体设置位置。
 
-![3.qqbot-url.png](doc/images/preview/3.qqbot-url.png)
+![3.qqbot-url.png](https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/preview/3.qqbot-url.png)
 
 > ↓ 下方图片: 权限开启后，机器人可以接收未被艾特的群消息的实际效果。
 
-![4.qqbot-url.png](doc/images/preview/4.qqbot-url.png)
+![4.qqbot-url.png](https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/preview/4.qqbot-url.png)
 
 ### 3️⃣ qqbot-guide
 > ↓ 下方图片: 群主在手机QQ群成员列表中找到机器人、进入资料页设置，并开启全量消息与主动发言的三步操作图。
 
 <div style="display: inline-block; border: 3px solid #12B7F5; border-radius: 8px; padding: 8px;">
-  <img src="doc/images/qqbot-guide-ui-settings.png" alt="qqbot-guide 手机QQ UI 手动配置指南" style="display: block; max-width: 100%; border-radius: 4px;">
+  <img src="https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/qqbot-guide-ui-settings.png" alt="qqbot-guide 手机QQ UI 手动配置指南" style="display: block; max-width: 100%; border-radius: 4px;">
 </div>
 
 > ↓ 下方图片: `qqbot-guide` 在 QQ 中发送的手动配置指南，包含 Bot 信息、内嵌步骤图和底部快捷按钮。
 
-![5.qqbot-guide.png](doc/images/preview/5.qqbot-guide.png)
+![5.qqbot-guide.png](https://cdn.jsdelivr.net/gh/VincentZyuApps/koishi-plugin-get-qq-bot-transfer-link@main/doc/images/preview/5.qqbot-guide.png)
